@@ -6,8 +6,14 @@ cache:
   paths:
   - node_modules/
 
+variables:
+  CFG_MONGO_HOST: "mongo"
+
 test:
   stage: test
+  services:
+    - name: mongo
+      alias: mongo
   script:
     - npm install
     - npm test

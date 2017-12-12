@@ -1,4 +1,6 @@
-let winston = require('winston')
+"use strict";
+
+let winston = require('winston');
 
 const logger = winston.createLogger({
   level: 'info',

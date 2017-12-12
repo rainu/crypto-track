@@ -1,11 +1,48 @@
-let router = require('express').Router();
-let log = require('../log');
+"use strict";
+
+const router = require('express').Router();
+const HttpStatus = require('http-status-codes');
+const log = require('../log');
+const Transaction = require('../service/model/transaction');
+
+router.route('/transaction/:id')
+  .get((req, resp) => {
+    Transaction.findById(req.params.id).then(
+      (tx) => {
+        resp.send(tx);
+      },
+      (err) => {
+        resp.status(HttpStatus.NOT_FOUND);
+        resp.end();
+      });
+  })
+  .delete((req, resp) => {
+    Transaction.findByIdAndRemove(req.params.id).then(
+      () => {
+        resp.status(HttpStatus.OK);
+        resp.end();
+      },
+      (err) => {
+        resp.status(HttpStatus.NOT_FOUND);
+        resp.end();
+      });
+  });
 
 router.route('/transaction')
-  .post(function(req, res) {
-    log.info("api!", req.body);
+  .post((req, resp) => {
+    let tx = new Transaction(req.body);
+    tx.save().then(
+      () => {
+        resp.location('/api/transaction/' + tx._id);
+        resp.status(HttpStatus.CREATED);
+        resp.end()
+      },
+      (err) => {
+        log.err('Could not create new transaction!', err);
 
-    res.end()
+        resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        resp.end();
+      });
   });
 
 module.exports = router;

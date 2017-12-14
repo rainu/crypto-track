@@ -4,8 +4,8 @@ require('./test_helper');
 const assert = require('assert');
 const HttpStatus = require('http-status-codes');
 const request = require('request');
-const Wallet = require('../../src/service/model/wallet');
-const Transaction = require('../../src/service/model/transaction');
+const Wallet = require('../../src/model/wallet');
+const Transaction = require('../../src/model/transaction');
 
 describe('Wallet Endpoint', () => {
   it('get a non existing wallet', (done) => {

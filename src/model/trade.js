@@ -3,16 +3,19 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const WalletSchema = new Schema({
-  address: {
+const TradeSchema = new Schema({
+  incoming: {
     type: String,
   },
-  currency: {
+  outgoing: {
     type: String,
   },
   description: {
     type: String,
+  },
+  ratio: {
+    type: Number,
   }
 });
 
-module.exports = mongoose.model('wallet', WalletSchema);
+module.exports = mongoose.model('trade', TradeSchema);

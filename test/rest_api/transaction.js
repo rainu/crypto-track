@@ -4,7 +4,7 @@ require('./test_helper');
 const assert = require('assert');
 const HttpStatus = require('http-status-codes');
 const request = require('request');
-const Transaction = require('../../src/service/model/transaction');
+const Transaction = require('../../src/model/transaction');
 
 describe('Transaction Endpoint', () => {
   it('get a non existing transaction', (done) => {

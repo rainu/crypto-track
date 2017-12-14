@@ -3,7 +3,7 @@
 const router = require('express').Router();
 const HttpStatus = require('http-status-codes');
 const log = require('../log');
-const Transaction = require('../service/model/transaction');
+const Transaction = require('../model/transaction');
 
 router.route('/transaction/:id')
   .get((req, resp) => {

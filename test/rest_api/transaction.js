@@ -1,35 +1,14 @@
 "use strict";
 
+require('./test_helper');
 const assert = require('assert');
-const http = require('http');
 const HttpStatus = require('http-status-codes');
 const request = require('request');
-const app = require('../../src/app');
-const config = require('../../src/config');
-const mongodb = require('../../src/config/database');
 const Transaction = require('../../src/service/model/transaction');
-const mongoose = require('mongoose');
-
-let server;
-let baseUri;
-
-before((done) => {
-  server = http.createServer(app).listen();
-  app.set('port', server.address().port);
-
-  baseUri = 'http://localhost:' + server.address().port;
-  done();
-});
-
-after((done) => {
-  mongoose.connection.close();
-  server.close();
-  process.exit(0);
-});
 
 describe('Transaction Endpoint', () => {
   it('get a non existing transaction', (done) => {
-    request(baseUri + '/api/transaction/_does_not_exists_', (err, resp, body) => {
+    request(global.baseUri + '/api/transaction/_does_not_exists_', (err, resp, body) => {
       assert(!err);
       assert.equal(HttpStatus.NOT_FOUND, resp.statusCode);
 
@@ -38,7 +17,7 @@ describe('Transaction Endpoint', () => {
   });
 
   it('get a non existing transaction', (done) => {
-    request(baseUri + '/api/transaction/123', (err, resp, body) => {
+    request(global.baseUri + '/api/transaction/123', (err, resp, body) => {
       assert(!err);
       assert.equal(HttpStatus.NOT_FOUND, resp.statusCode);
 
@@ -58,7 +37,7 @@ describe('Transaction Endpoint', () => {
     };
 
     request.post({
-      url: baseUri + '/api/transaction',
+      url: global.baseUri + '/api/transaction',
       form: tx
     }, (err, resp, body) => {
       assert(!err);
@@ -66,7 +45,7 @@ describe('Transaction Endpoint', () => {
       assert(resp.headers.location);
 
       //check if location is right!
-      request.get(baseUri + resp.headers.location, (err, resp, body) => {
+      request.get(global.baseUri + resp.headers.location, (err, resp, body) => {
         assert(!err);
         assert.equal(HttpStatus.OK, resp.statusCode);
         let parsedBody = JSON.parse(body);
@@ -81,7 +60,7 @@ describe('Transaction Endpoint', () => {
   });
 
   it('delete a non existing transaction', (done) => {
-    request.delete(baseUri + '/api/transaction/123', (err, resp, body) => {
+    request.delete(global.baseUri + '/api/transaction/123', (err, resp, body) => {
       assert(!err);
       assert.equal(HttpStatus.NOT_FOUND, resp.statusCode);
 
@@ -90,7 +69,7 @@ describe('Transaction Endpoint', () => {
   });
 
   it('delete a non existing transaction', (done) => {
-    request.delete(baseUri + '/api/transaction/_does_not_exists_', (err, resp, body) => {
+    request.delete(global.baseUri + '/api/transaction/_does_not_exists_', (err, resp, body) => {
       assert(!err);
       assert.equal(HttpStatus.NOT_FOUND, resp.statusCode);
 
@@ -101,7 +80,7 @@ describe('Transaction Endpoint', () => {
   it('delete a existing transaction', (done) => {
     let tx = new Transaction({});
     tx.save().then(() => {
-      request.delete(baseUri + '/api/transaction/' + tx._id, (err, resp, body) => {
+      request.delete(global.baseUri + '/api/transaction/' + tx._id, (err, resp, body) => {
         assert(!err);
         assert.equal(HttpStatus.OK, resp.statusCode);
 

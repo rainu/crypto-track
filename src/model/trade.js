@@ -4,17 +4,16 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const TradeSchema = new Schema({
-  incoming: {
-    type: String,
+  in: {
+    type: Schema.Types.ObjectId,
+    ref: 'transaction'
   },
-  outgoing: {
-    type: String,
+  out: {
+    type: Schema.Types.ObjectId,
+    ref: 'transaction'
   },
   description: {
     type: String,
-  },
-  ratio: {
-    type: Number,
   }
 });
 

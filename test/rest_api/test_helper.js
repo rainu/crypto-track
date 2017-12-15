@@ -14,11 +14,13 @@ before(() => {
 });
 
 beforeEach((done) => {
-  const { transactions, wallets, trades } = mongoose.connection.collections;
+  const { transactions, wallets, trades, watches } = mongoose.connection.collections;
   transactions.drop(() => {
     wallets.drop(() => {
       trades.drop(() => {
-        done();
+        watches.drop(() => {
+          done();
+        });
       });
     });
   });

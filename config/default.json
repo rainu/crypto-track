@@ -10,5 +10,13 @@
   "request": {
     "repeatSleep": 1000,
     "maxRetry": 10
+  },
+  "cron": {
+    "respawn": {
+      "time": 1800000
+    },
+    "read": {
+      "time": 300000
+    }
   }
 }

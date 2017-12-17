@@ -4,8 +4,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const TransactionSchema = new Schema({
+  externalId: {
+    type: String,
+  },
   date: {
-    type: Number,
+    type: Date,
   },
   amount: {
     type: Number,

@@ -27,7 +27,7 @@ describe('Transaction Endpoint', () => {
 
   it('create a new transaction', (done) => {
     let tx = {
-      date: 1312,
+      date: new Date().toISOString(),
       amount: 1308,
       from: 'MIR',
       to: 'DIR',

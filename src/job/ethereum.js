@@ -75,10 +75,10 @@ const doJob = (address, importIn, importOut) => {
             continue;
           }
 
-          if(importIn && tx.tx_input_n == 0) {
+          if(importIn && tx.tx_input_n >= 0) {
             //if we want to import incoming tx and the current tx is an incoming one
             promises.push(handleTransaction(tx.tx_hash));
-          } else if (importOut && tx.tx_input_n == -1){
+          } else if (importOut && tx.tx_output_n >= 0){
             //if we want to import outgoing tx and the current tx is an outgoing one
             promises.push(handleTransaction(tx.tx_hash));
           }

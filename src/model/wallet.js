@@ -31,9 +31,11 @@ WalletSchema.virtual('balance').get(function() {
 
   for(let tx of this.inTransactions) {
     balance += tx.amount;
+    balance -= tx.fee;
   }
   for(let tx of this.outTransactions) {
     balance -= tx.amount;
+    balance -= tx.fee;
   }
 
   return balance;

@@ -4,6 +4,7 @@ const router = require('express').Router();
 const HttpStatus = require('http-status-codes');
 const log = require('../log');
 const Account = require('../model/account');
+const Wallet = require('../model/wallet');
 
 router.route('/account/:username')
   .get((req, resp) => {
@@ -55,9 +56,34 @@ router.route('/account')
     let account = new Account(req.body);
     account.save().then(
       () => {
-        resp.location('/api/account/' + account.username);
-        resp.status(HttpStatus.CREATED);
-        resp.end()
+        let fiatWallet = new Wallet({
+          address: '_COMPENSATION_FIAT_',
+          description: 'Compensation account for fiat currencies.'
+        });
+        fiatWallet.save().then(
+          () => {
+            account.wallets.push(fiatWallet);
+            account.save().then(
+              () => {
+                resp.location('/api/account/' + account.username);
+                resp.status(HttpStatus.CREATED);
+                resp.end()
+              },
+              (err) => {
+                log.err('Could not create link between new wallet for new account!', err);
+
+                resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
+                resp.end();
+              }
+            );
+          },
+          (err) => {
+            log.err('Could not create new wallet for new account!', err);
+
+            resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
+            resp.end();
+          }
+        );
       },
       (err) => {
         log.err('Could not create new account!', err);

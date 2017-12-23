@@ -39,6 +39,8 @@ describe('Account Endpoint', () => {
         for (let key of Object.keys(account)) {
           assert.equal(account[key], parsedBody[key]);
         }
+        assert.equal(parsedBody.wallets.length, 1);
+        assert.equal(parsedBody.wallets[0].address, '_COMPENSATION_FIAT_');
 
         done();
       });

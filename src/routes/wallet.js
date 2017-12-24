@@ -4,6 +4,7 @@ const router = require('express').Router();
 const HttpStatus = require('http-status-codes');
 const log = require('../log');
 const Wallet = require('../model/wallet');
+const WalletFactory = require('../model/wallet_factory');
 
 router.route('/wallet/:id')
   .get((req, resp) => {
@@ -54,6 +55,23 @@ router.route('/wallet/:id/full')
 router.route('/wallet')
   .post((req, resp) => {
     let wallet = new Wallet(req.body);
+    wallet.save().then(
+      () => {
+        resp.location('/api/wallet/' + wallet._id);
+        resp.status(HttpStatus.CREATED);
+        resp.end()
+      },
+      (err) => {
+        log.err('Could not create new wallet!', err);
+
+        resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        resp.end();
+      });
+  });
+
+router.route('/wallet/exchange/:exchange')
+  .post((req, resp) => {
+    let wallet = WalletFactory.exchange(req.params.exchange);
     wallet.save().then(
       () => {
         resp.location('/api/wallet/' + wallet._id);

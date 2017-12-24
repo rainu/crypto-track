@@ -4,7 +4,7 @@ const router = require('express').Router();
 const HttpStatus = require('http-status-codes');
 const log = require('../log');
 const Account = require('../model/account');
-const Wallet = require('../model/wallet');
+const WalletFactory = require('../model/wallet_factory');
 
 router.route('/account/:username')
   .get((req, resp) => {
@@ -56,10 +56,7 @@ router.route('/account')
     let account = new Account(req.body);
     account.save().then(
       () => {
-        let fiatWallet = new Wallet({
-          address: '_COMPENSATION_FIAT_' + account.username,
-          description: 'Compensation account for fiat currencies.'
-        });
+        let fiatWallet = WalletFactory.compensation(account.username);
         fiatWallet.save().then(
           () => {
             account.wallets.push(fiatWallet);

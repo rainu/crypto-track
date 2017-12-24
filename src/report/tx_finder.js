@@ -1,10 +1,8 @@
 "use strict";
 
 const log = require('../log');
-const Wallet = require('../model/wallet');
+const dbService = require('../db_service');
 const TradeType = require('../model/trade_type');
-const Account = require('../model/account');
-const Trade = require('../model/trade');
 
 const extractTransactions = (wallets, trades) => {
   //here we have to return the equivalent schema which our tax_report needs
@@ -72,53 +70,13 @@ const extractTransactions = (wallets, trades) => {
 
 const findTransactions = (username) => {
   return new Promise((resolve, reject) => {
-    //first we have to find all wallets for the user
-   Account.findOne({username: username}).then(
-     (account) => {
-       //in the wallets we can join th transactions
-       Wallet.find({_id: { $in: account.wallets }}).populate('outTransactions').populate('inTransactions').then(
-         (wallets) => {
-           //now we have the wallets (and transactions) and we can find the trades
-           //but first we need to extract all transaction ids
-           let txIds = new Set();
-
-           for(let wallet of wallets) {
-             for(let tx of wallet.outTransactions) {
-               txIds.add(tx._id);
-             }
-             for(let tx of wallet.inTransactions) {
-               txIds.add(tx._id);
-             }
-           }
-           const atxIds = [...txIds];
-
-           Trade.find({
-             $or: [{'in': { $in: atxIds }}, {'out': { $in: atxIds }}]
-           }).then(
-             (trades) => {
-               //now we have gather all information for account
-               let result = extractTransactions(wallets, trades);
-               resolve(result);
-             },
-             (err) => {
-               log.error(`Could not find trades for account ${username}`, err);
-               reject(err);
-             }
-           );
-         },
-         (err) => {
-           log.error(`Could not find wallets for account ${username}`, err);
-           reject(err);
-         }
-       );
-     },
-     (err) => {
-       log.error(`Could not find account by name ${username}`, err);
-       reject(err);
-     }
-   );
+    dbService.getCompleteAccount(username).then((data) => {
+      let result = extractTransactions(data.wallets, data.trades);
+      resolve(result);
+    }, (err) => {
+      reject(err);
+    });
   });
 };
-
 
 module.exports = findTransactions;

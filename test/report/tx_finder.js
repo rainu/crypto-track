@@ -2,6 +2,7 @@ require('../rest_api/test_helper');
 const assert = require('assert');
 const txFinder = require('../../src/report/tx_finder');
 const Wallet = require('../../src/model/wallet');
+const WalletFactory = require('../../src/model/wallet_factory');
 const Transaction = require('../../src/model/transaction');
 const Account = require('../../src/model/account');
 const Trade = require('../../src/model/trade');
@@ -9,14 +10,14 @@ const TradeType = require('../../src/model/trade_type');
 
 describe('Tax transaction finder', () => {
 
-  it(`1) buy coin from exchange 
-  2) transfer to wallet 
-  2.1) hold it 
-  3) transfer it back to exchange 
+  it(`1) buy coin from exchange
+  2) transfer to wallet
+  2.1) hold it
+  3) transfer it back to exchange
   4) sell the coin`, (done) => {
     let wallet = {
-      fiat: new Wallet({address: '_COMPENSATION_FIAT_rainu'}),
-      exchange: new Wallet({address: '_EXCHANGE_rainu', description: 'Bitcoin.de'}),
+      fiat: WalletFactory.compensation('rainu'),
+      exchange: WalletFactory.exchange('bitcoin_de'),
       btc: new Wallet({address: 'btc123456789'}),
     };
     let account = new Account({username: 'rainu', wallets: [wallet.fiat, wallet.exchange, wallet.btc]});
@@ -66,8 +67,8 @@ describe('Tax transaction finder', () => {
   2) transfer to wallet
   3) buy something with coin`, (done) => {
     let wallet = {
-      fiat: new Wallet({address: '_COMPENSATION_FIAT_rainu'}),
-      exchange: new Wallet({address: '_EXCHANGE_rainu', description: 'Bitcoin.de'}),
+      fiat: WalletFactory.compensation('rainu'),
+      exchange: WalletFactory.exchange('bitcoin_de'),
       btc: new Wallet({address: 'btc123456789'}),
     };
     let account = new Account({username: 'rainu', wallets: [wallet.fiat, wallet.exchange, wallet.btc]});
@@ -118,8 +119,8 @@ describe('Tax transaction finder', () => {
   4) transfer other coin to exchange
   5) sell other coin`, (done) => {
     let wallet = {
-      fiat: new Wallet({address: '_COMPENSATION_FIAT_rainu'}),
-      exchange: new Wallet({address: '_EXCHANGE_rainu', description: 'Bitcoin.de'}),
+      fiat: WalletFactory.compensation('rainu'),
+      exchange: WalletFactory.exchange('bitcoin_de'),
       btc: new Wallet({address: 'btc123456789'}),
       eth: new Wallet({address: 'eth123456789'}),
     };
@@ -131,7 +132,6 @@ describe('Tax transaction finder', () => {
 
       new Transaction({from: wallet.btc.address, date: new Date('2000-01-02'), amount: 1, currency: 'BTC'}),
       new Transaction({to: wallet.eth.address, date: new Date('2000-01-02'), amount: 10, currency: 'ETH'}),
-
 
       new Transaction({from: wallet.eth.address, date: new Date('2000-06-01'), amount: 10, currency: 'ETH'}),
       new Transaction({to: wallet.fiat.address, date: new Date('2000-06-01'), amount: 200, currency: 'EUR'}),

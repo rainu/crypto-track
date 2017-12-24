@@ -12,6 +12,25 @@ const TradeSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'transaction'
   },
+  inValue: {
+    currency: {
+      type: String,
+    },
+    amount: {
+      type: Number,
+    }
+  },
+  outValue: {
+    currency: {
+      type: String,
+    },
+    amount: {
+      type: Number,
+    }
+  },
+  tradeType: {
+    type: String,
+  },
   description: {
     type: String,
   }

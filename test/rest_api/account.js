@@ -40,7 +40,7 @@ describe('Account Endpoint', () => {
           assert.equal(account[key], parsedBody[key]);
         }
         assert.equal(parsedBody.wallets.length, 1);
-        assert.equal(parsedBody.wallets[0].address, '_COMPENSATION_FIAT_');
+        assert.equal(parsedBody.wallets[0].address, '_COMPENSATION_FIAT_rainu');
 
         done();
       });

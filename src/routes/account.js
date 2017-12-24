@@ -57,7 +57,7 @@ router.route('/account')
     account.save().then(
       () => {
         let fiatWallet = new Wallet({
-          address: '_COMPENSATION_FIAT_',
+          address: '_COMPENSATION_FIAT_' + account.username,
           description: 'Compensation account for fiat currencies.'
         });
         fiatWallet.save().then(

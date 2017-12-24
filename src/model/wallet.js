@@ -26,19 +26,36 @@ WalletSchema.virtual('outTransactions', {
   justOne: false
 });
 
-WalletSchema.virtual('balance').get(function() {
+WalletSchema.virtual('currencies').get(function() {
+  let result = new Set();
+
+  for(let tx of this.inTransactions) {
+    result.add(tx.currency);
+  }
+  for(let tx of this.outTransactions) {
+    result.add(tx.currency);
+  }
+
+  return [...result];
+});
+
+WalletSchema.methods.getBalance = function(currency) {
   let balance = 0;
 
   for(let tx of this.inTransactions) {
-    balance += tx.amount;
-    balance -= tx.fee;
+    if(tx.currency === currency) {
+      balance += tx.amount;
+      balance -= tx.fee ? tx.fee : 0;
+    }
   }
   for(let tx of this.outTransactions) {
-    balance -= tx.amount;
-    balance -= tx.fee;
+    if(tx.currency === currency) {
+      balance -= tx.amount;
+      balance -= tx.fee ? tx.fee : 0;
+    }
   }
 
   return balance;
-});
+};
 
 module.exports = mongoose.model('wallet', WalletSchema);

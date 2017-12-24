@@ -32,13 +32,18 @@ router.route('/wallet/:id/full')
   .get((req, resp) => {
     Wallet.findById(req.params.id).populate('outTransactions').populate('inTransactions').then(
       (wallet) => {
-        resp.send({
+        let fullWallet = {
           _id: wallet._id,
           address: wallet.address,
           description: wallet.description,
           transactions: [...wallet.inTransactions, ...wallet.outTransactions],
-          balance: wallet.balance,
-        });
+          balance: {},
+        };
+        for(let currency of wallet.currencies){
+          fullWallet.balance[currency] = wallet.getBalance(currency);
+        }
+
+        resp.send(fullWallet);
       },
       (err) => {
         resp.status(HttpStatus.NOT_FOUND);

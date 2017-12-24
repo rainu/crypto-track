@@ -60,11 +60,13 @@ describe('Wallet Endpoint', () => {
         new Transaction({
           from: "0x123456789",
           to: "0x987654321",
+          currency: 'ETH',
           amount: 1.23
         }),
         new Transaction({
           from: "0x987654321",
           to: "0x123456789",
+          currency: 'ETH',
           amount: 0.23
         })
     ];
@@ -83,7 +85,7 @@ describe('Wallet Endpoint', () => {
         assert.equal(wallet.address, parsedBody.address);
         assert.equal(wallet.description, parsedBody.description);
         assert.equal(2, parsedBody.transactions.length);
-        assert.equal(1, parsedBody.balance);
+        assert.equal(1, parsedBody.balance.ETH);
 
         done();
       });

@@ -68,6 +68,25 @@ describe('Account Endpoint', () => {
     });
   });
 
+  it('create a new exchange wallet for account', (done) => {
+    let account = new Account({username: 'rainu'});
+    account.save().then(() => {
+      request.post(global.baseUri + '/api/account/rainu/wallet/exchange/bitcoin_de', (err, resp, body) => {
+        assert(!err);
+        assert.equal(HttpStatus.CREATED, resp.statusCode);
+        assert(resp.headers.location);
+
+        //check if location is right!
+        request.get(global.baseUri + resp.headers.location, (err, resp, body) => {
+          assert(!err);
+          assert.equal(HttpStatus.OK, resp.statusCode);
+
+          done();
+        });
+      });
+    });
+  });
+
   it('link a wallet to an account', (done) => {
     let account = new Account({username: 'rainu'});
     let wallet = new Wallet({address: '0x123456789', description: 'TestWallet!'});

@@ -16,6 +16,7 @@ app.use('/api/', require('./routes/trade'));
 app.use('/api/', require('./routes/wallet'));
 app.use('/api/', require('./routes/watch'));
 app.use('/api/', require('./routes/account'));
+app.use('/api/', require('./routes/import'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

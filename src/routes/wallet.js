@@ -69,21 +69,4 @@ router.route('/wallet')
       });
   });
 
-router.route('/wallet/exchange/:exchange')
-  .post((req, resp) => {
-    let wallet = WalletFactory.exchange(req.params.exchange);
-    wallet.save().then(
-      () => {
-        resp.location('/api/wallet/' + wallet._id);
-        resp.status(HttpStatus.CREATED);
-        resp.end()
-      },
-      (err) => {
-        log.err('Could not create new wallet!', err);
-
-        resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
-        resp.end();
-      });
-  });
-
 module.exports = router;

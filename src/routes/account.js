@@ -51,6 +51,43 @@ router.route('/account/:username')
       });
   });
 
+router.route('/account/:username/wallet/exchange/:exchange')
+  .post((req, resp) => {
+    Account.findOne({username: req.params.username}).populate('wallets').then(
+      (account) => {
+        if(account) {
+          let wallet = WalletFactory.exchange(req.params.username, req.params.exchange);
+          wallet.save().then(
+            () => {
+              account.wallets.push(wallet);
+              account.save().then(() => {
+                resp.location('/api/wallet/' + wallet._id);
+                resp.status(HttpStatus.CREATED);
+                resp.end()
+              }, (err) => {
+                log.err('Could not link new wallet to account!', err);
+
+                resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
+                resp.end();
+              });
+            },
+            (err) => {
+              log.err('Could not create new wallet!', err);
+
+              resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
+              resp.end();
+            });
+        }else{
+          resp.status(HttpStatus.NOT_FOUND);
+          resp.end();
+        }
+      },
+      (err) => {
+        resp.status(HttpStatus.NOT_FOUND);
+        resp.end();
+      });
+  });
+
 router.route('/account')
   .post((req, resp) => {
     let account = new Account(req.body);

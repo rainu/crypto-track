@@ -3,9 +3,9 @@
 const Wallet = require('./wallet');
 
 module.exports = {
-  exchange: (exchange) => {
+  exchange: (username, exchange) => {
     return new Wallet({
-      address: `_EXCHANGE_${exchange}`,
+      address: `_EXCHANGE_${exchange}_${username}`,
       description: `Exchange wallet for ${exchange}`
     });
   },

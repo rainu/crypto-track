@@ -10,6 +10,8 @@ const WalletSchema = new Schema({
   description: {
     type: String,
   }
+}, {
+  usePushEach: true,
 });
 
 WalletSchema.virtual('inTransactions', {

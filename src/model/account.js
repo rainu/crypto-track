@@ -12,6 +12,8 @@ const AccountSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'wallet'
   }]
+}, {
+  usePushEach: true,
 });
 
 module.exports = mongoose.model('account', AccountSchema);

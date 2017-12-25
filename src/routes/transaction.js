@@ -38,7 +38,7 @@ router.route('/transaction')
         resp.end()
       },
       (err) => {
-        log.err('Could not create new transaction!', err);
+        log.error('Could not create new transaction!', err);
 
         resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
         resp.end();

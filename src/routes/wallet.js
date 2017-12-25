@@ -62,7 +62,7 @@ router.route('/wallet')
         resp.end()
       },
       (err) => {
-        log.err('Could not create new wallet!', err);
+        log.error('Could not create new wallet!', err);
 
         resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
         resp.end();

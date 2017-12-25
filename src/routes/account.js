@@ -65,14 +65,14 @@ router.route('/account/:username/wallet/exchange/:exchange')
                 resp.status(HttpStatus.CREATED);
                 resp.end()
               }, (err) => {
-                log.err('Could not link new wallet to account!', err);
+                log.error('Could not link new wallet to account!', err);
 
                 resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
                 resp.end();
               });
             },
             (err) => {
-              log.err('Could not create new wallet!', err);
+              log.error('Could not create new wallet!', err);
 
               resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
               resp.end();
@@ -104,7 +104,7 @@ router.route('/account')
                 resp.end()
               },
               (err) => {
-                log.err('Could not create link between new wallet for new account!', err);
+                log.error('Could not create link between new wallet for new account!', err);
 
                 resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
                 resp.end();
@@ -112,7 +112,7 @@ router.route('/account')
             );
           },
           (err) => {
-            log.err('Could not create new wallet for new account!', err);
+            log.error('Could not create new wallet for new account!', err);
 
             resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
             resp.end();
@@ -120,7 +120,7 @@ router.route('/account')
         );
       },
       (err) => {
-        log.err('Could not create new account!', err);
+        log.error('Could not create new account!', err);
 
         resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
         resp.end();

@@ -61,7 +61,7 @@ router.route('/trade')
         resp.end()
       },
       (err) => {
-        log.err('Could not create new trade!', err);
+        log.error('Could not create new trade!', err);
 
         resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
         resp.end();

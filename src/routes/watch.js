@@ -38,7 +38,7 @@ router.route('/watch')
         resp.end()
       },
       (err) => {
-        log.err('Could not create new watch!', err);
+        log.error('Could not create new watch!', err);
 
         resp.status(HttpStatus.INTERNAL_SERVER_ERROR);
         resp.end();

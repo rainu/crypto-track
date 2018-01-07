@@ -34,7 +34,15 @@ const log = require('../log');
     trades: [
       {
         in: <txId>,
+        inValue: {
+          amount: <amountInFiat>,
+          currency: <fiatCurrency>
+        },
         out: <txId>,
+        outValue: {
+          amount: <amountInFiat>,
+          currency: <fiatCurrency>
+        },
         type: <type>,
         description: <description>,
       },
@@ -102,6 +110,19 @@ let doImport = (accountData) => {
             description: trade.description,
             tradeType: trade.type,
           });
+          if(trade.hasOwnProperty('inValue')) {
+            dbTrade.inValue = {
+              amount: trade.inValue.amount,
+              currency: trade.inValue.currency,
+            }
+          }
+          if(trade.hasOwnProperty('outValue')) {
+            dbTrade.outValue = {
+              amount: trade.outValue.amount,
+              currency: trade.outValue.currency,
+            }
+          }
+
           dbPromises.push(dbTrade.save());
         }
 
@@ -160,12 +181,27 @@ let doExport = (accountName) => {
       }
 
       for(let trade of data.trades) {
-        result.trades.push({
+        let realTrade = {
           in: trade.in.toString(),
           out: trade.out.toString(),
           type: trade.tradeType,
           description: trade.description,
-        });
+        };
+
+        if(trade.hasOwnProperty('inValue')) {
+          realTrade.inValue = {
+            amount: trade.inValue.amount,
+            currency: trade.inValue.currency,
+          }
+        }
+        if(trade.hasOwnProperty('outValue')) {
+          realTrade.outValue = {
+            amount: trade.outValue.amount,
+            currency: trade.outValue.currency,
+          }
+        }
+
+        result.trades.push(realTrade);
       }
 
       resolve(result);

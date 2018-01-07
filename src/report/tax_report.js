@@ -18,6 +18,7 @@ const report = (sellTransaction, buyTransactions) => {
       sellDate: sellTransaction.date,
       sellPrice: amount * sellTransaction.exchangeRatio,
       short: moment(buyTransaction.date).add(1, 'year') >= moment(sellTransaction.date),
+      currency: buyTransaction.currency,
     };
     report.profit = report.sellPrice - report.buyPrice;
 

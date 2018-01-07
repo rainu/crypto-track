@@ -8,7 +8,8 @@ describe('FIFO tax report', () => {
       date: new Date(date),
       amount: amount,
       fee: fee,
-      exchangeRatio: ratio
+      exchangeRatio: ratio,
+      currency: 'BTC'
     }
   };
 
@@ -21,6 +22,7 @@ describe('FIFO tax report', () => {
       sellPrice: sellPrice,
       profit: profit,
       short: short,
+      currency: 'BTC'
     }
   };
 
@@ -162,6 +164,7 @@ describe('FIFO tax report', () => {
           assert.equal(curCase.expected[i].sellPrice, report[i].sellPrice);
           assert.equal(curCase.expected[i].profit, report[i].profit);
           assert.equal(curCase.expected[i].short, report[i].short);
+          assert.equal(curCase.expected[i].currency, report[i].currency);
         }
     });
   }

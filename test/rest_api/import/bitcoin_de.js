@@ -36,7 +36,6 @@ describe('Import Endpoint', () => {
   for(let coin of coins) {
     it(`import ${coin.name}-csv from bitcoin.de`, (done) => {
       fs.createReadStream(`${__dirname}/bitcoin_de_${coin.name}.csv`)
-      // fs.createReadStream(`${__dirname}/real_bitcoin_de_bch.csv`)
         .pipe(request.put(global.baseUri + `/api/account/${username}/import/csv/bitcoin_de`))
         .on('response', (response) => {
           assert.equal(response.statusCode, HttpStatus.CREATED);

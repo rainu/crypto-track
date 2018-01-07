@@ -30,4 +30,24 @@ const TransactionSchema = new Schema({
   }
 });
 
+const normalize = function(currency, amount) {
+  switch(currency.toUpperCase()) {
+    case 'EUR': return amount * 1E-2;
+    case 'BTC': return amount * 1E-8;
+    case 'BCH': return amount * 1E-8;
+    case 'ETH': return amount * 1E-18;
+  }
+
+  return amount;
+};
+
+TransactionSchema.methods.normalizedAmount = function() {
+  return normalize(this.currency, this.amount);
+};
+TransactionSchema.methods.normalizedFee = function() {
+  if(!this.fee) return undefined;
+
+  return normalize(this.currency, this.fee);
+};
+
 module.exports = mongoose.model('transaction', TransactionSchema);

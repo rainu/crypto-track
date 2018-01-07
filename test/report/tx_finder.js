@@ -22,12 +22,12 @@ describe('Tax transaction finder', () => {
     };
     let account = new Account({username: 'rainu', wallets: [wallet.fiat, wallet.exchange, wallet.btc]});
     let transactions = [
-      new Transaction({from: wallet.fiat.address, date: new Date('2000-01-01'), amount: 100, currency: 'EUR'}),
-      new Transaction({to: wallet.exchange.address, date: new Date('2000-01-01'), amount: 1, currency: 'BTC'}),
-      new Transaction({from: wallet.exchange.address, to: wallet.btc.address, date: new Date('2000-01-02'), amount: 1, currency: 'BTC'}),
-      new Transaction({from: wallet.btc.address, to: wallet.exchange.address, date: new Date('2000-06-01'), amount: 1, currency: 'BTC'}),
-      new Transaction({from: wallet.exchange.address, date: new Date('2000-06-01'), amount: 1, currency: 'BTC'}),
-      new Transaction({to: wallet.fiat.address, date: new Date('2000-06-01'), amount: 200, currency: 'EUR'}),
+      new Transaction({from: wallet.fiat.address, date: new Date('2000-01-01'), amount: 100E+2, currency: 'EUR'}),
+      new Transaction({to: wallet.exchange.address, date: new Date('2000-01-01'), amount: 1E+8, currency: 'BTC'}),
+      new Transaction({from: wallet.exchange.address, to: wallet.btc.address, date: new Date('2000-01-02'), amount: 1E+8, currency: 'BTC'}),
+      new Transaction({from: wallet.btc.address, to: wallet.exchange.address, date: new Date('2000-06-01'), amount: 1E+8, currency: 'BTC'}),
+      new Transaction({from: wallet.exchange.address, date: new Date('2000-06-01'), amount: 1E+8, currency: 'BTC'}),
+      new Transaction({to: wallet.fiat.address, date: new Date('2000-06-01'), amount: 200E+2, currency: 'EUR'}),
     ];
     let trades = [
       new Trade({in: transactions[0], out: transactions[1], tradeType: TradeType.BUY}),
@@ -45,15 +45,15 @@ describe('Tax transaction finder', () => {
 
     Promise.all(promises).then(() => {
       txFinder(account.username).then((result) => {
-        assert.equal(result.in.length, 1);
-        assert.equal(result.in[0].date.toISOString(), transactions[0].date.toISOString());
-        assert.equal(result.in[0].amount, 1);
-        assert.equal(result.in[0].exchangeRatio, 100);
+        assert.equal(result['BTC'].in.length, 1);
+        assert.equal(result['BTC'].in[0].date.toISOString(), transactions[0].date.toISOString());
+        assert.equal(result['BTC'].in[0].amount, 1);
+        assert.equal(result['BTC'].in[0].exchangeRatio, 100);
 
-        assert.equal(result.out.length, 1);
-        assert.equal(result.out[0].date.toISOString(), transactions[5].date.toISOString());
-        assert.equal(result.out[0].amount, 1);
-        assert.equal(result.out[0].exchangeRatio, 200);
+        assert.equal(result['BTC'].out.length, 1);
+        assert.equal(result['BTC'].out[0].date.toISOString(), transactions[5].date.toISOString());
+        assert.equal(result['BTC'].out[0].amount, 1);
+        assert.equal(result['BTC'].out[0].exchangeRatio, 200);
 
         done();
       }, (err) => {
@@ -73,11 +73,11 @@ describe('Tax transaction finder', () => {
     };
     let account = new Account({username: 'rainu', wallets: [wallet.fiat, wallet.exchange, wallet.btc]});
     let transactions = [
-      new Transaction({from: wallet.fiat.address, date: new Date('2000-01-01'), amount: 100, currency: 'EUR'}),
-      new Transaction({to: wallet.exchange.address, date: new Date('2000-01-01'), amount: 1, currency: 'BTC'}),
-      new Transaction({from: wallet.exchange.address, to: wallet.btc.address, date: new Date('2000-01-02'), amount: 1, currency: 'BTC'}),
-      new Transaction({from: wallet.btc.address, date: new Date('2000-06-01'), amount: 1, currency: 'BTC'}),
-      new Transaction({to: wallet.fiat.address, date: new Date('2000-06-01'), amount: 200, currency: 'EUR'}),
+      new Transaction({from: wallet.fiat.address, date: new Date('2000-01-01'), amount: 100E+2, currency: 'EUR'}),
+      new Transaction({to: wallet.exchange.address, date: new Date('2000-01-01'), amount: 1E+8, currency: 'BTC'}),
+      new Transaction({from: wallet.exchange.address, to: wallet.btc.address, date: new Date('2000-01-02'), amount: 1E+8, currency: 'BTC'}),
+      new Transaction({from: wallet.btc.address, date: new Date('2000-06-01'), amount: 1E+8, currency: 'BTC'}),
+      new Transaction({to: wallet.fiat.address, date: new Date('2000-06-01'), amount: 200E+2, currency: 'EUR'}),
     ];
     let trades = [
       new Trade({in: transactions[0], out: transactions[1], tradeType: TradeType.BUY}),
@@ -95,15 +95,15 @@ describe('Tax transaction finder', () => {
 
     Promise.all(promises).then(() => {
       txFinder(account.username).then((result) => {
-        assert.equal(result.in.length, 1);
-        assert.equal(result.in[0].date.toISOString(), transactions[0].date.toISOString());
-        assert.equal(result.in[0].amount, 1);
-        assert.equal(result.in[0].exchangeRatio, 100);
+        assert.equal(result['BTC'].in.length, 1);
+        assert.equal(result['BTC'].in[0].date.toISOString(), transactions[0].date.toISOString());
+        assert.equal(result['BTC'].in[0].amount, 1);
+        assert.equal(result['BTC'].in[0].exchangeRatio, 100);
 
-        assert.equal(result.out.length, 1);
-        assert.equal(result.out[0].date.toISOString(), transactions[4].date.toISOString());
-        assert.equal(result.out[0].amount, 1);
-        assert.equal(result.out[0].exchangeRatio, 200);
+        assert.equal(result['BTC'].out.length, 1);
+        assert.equal(result['BTC'].out[0].date.toISOString(), transactions[4].date.toISOString());
+        assert.equal(result['BTC'].out[0].amount, 1);
+        assert.equal(result['BTC'].out[0].exchangeRatio, 200);
 
         done();
       }, (err) => {
@@ -126,15 +126,15 @@ describe('Tax transaction finder', () => {
     };
     let account = new Account({username: 'rainu', wallets: [wallet.fiat, wallet.exchange, wallet.btc, wallet.eth]});
     let transactions = [
-      new Transaction({from: wallet.fiat.address, date: new Date('2000-01-01'), amount: 100, currency: 'EUR'}),
-      new Transaction({to: wallet.exchange.address, date: new Date('2000-01-01'), amount: 1, currency: 'BTC'}),
-      new Transaction({from: wallet.exchange.address, to: wallet.btc.address, date: new Date('2000-01-02'), amount: 1, currency: 'BTC'}),
+      new Transaction({from: wallet.fiat.address, date: new Date('2000-01-01'), amount: 100E+2, currency: 'EUR'}),
+      new Transaction({to: wallet.exchange.address, date: new Date('2000-01-01'), amount: 1E+8, currency: 'BTC'}),
+      new Transaction({from: wallet.exchange.address, to: wallet.btc.address, date: new Date('2000-01-02'), amount: 1E+8, currency: 'BTC'}),
 
-      new Transaction({from: wallet.btc.address, date: new Date('2000-01-02'), amount: 1, currency: 'BTC'}),
-      new Transaction({to: wallet.eth.address, date: new Date('2000-01-02'), amount: 10, currency: 'ETH'}),
+      new Transaction({from: wallet.btc.address, date: new Date('2000-01-02'), amount: 1E+8, currency: 'BTC'}),
+      new Transaction({to: wallet.eth.address, date: new Date('2000-01-02'), amount: 10E+18, currency: 'ETH'}),
 
-      new Transaction({from: wallet.eth.address, date: new Date('2000-06-01'), amount: 10, currency: 'ETH'}),
-      new Transaction({to: wallet.fiat.address, date: new Date('2000-06-01'), amount: 200, currency: 'EUR'}),
+      new Transaction({from: wallet.eth.address, date: new Date('2000-06-01'), amount: 10E+18, currency: 'ETH'}),
+      new Transaction({to: wallet.fiat.address, date: new Date('2000-06-01'), amount: 200E+2, currency: 'EUR'}),
     ];
     let trades = [
       new Trade({in: transactions[0], out: transactions[1], tradeType: TradeType.BUY}),
@@ -154,22 +154,20 @@ describe('Tax transaction finder', () => {
 
     Promise.all(promises).then(() => {
       txFinder(account.username).then((result) => {
-        assert.equal(result.in.length, 2);
-        assert.equal(result.in[0].date.toISOString(), transactions[0].date.toISOString());
-        assert.equal(result.in[0].amount, 1);
-        assert.equal(result.in[0].exchangeRatio, 100);
-        assert.equal(result.in[1].date.toISOString(), transactions[4].date.toISOString());
-        assert.equal(result.in[1].amount, 10);
-        assert.equal(result.in[1].exchangeRatio, 15);
+        assert.equal(result['BTC'].in[0].date.toISOString(), transactions[0].date.toISOString());
+        assert.equal(result['BTC'].in[0].amount, 1);
+        assert.equal(result['BTC'].in[0].exchangeRatio, 100);
+        assert.equal(result['ETH'].in[0].date.toISOString(), transactions[4].date.toISOString());
+        assert.equal(result['ETH'].in[0].amount, 10);
+        assert.equal(result['ETH'].in[0].exchangeRatio, 15);
 
 
-        assert.equal(result.out.length, 2);
-        assert.equal(result.out[0].date.toISOString(), transactions[3].date.toISOString());
-        assert.equal(result.out[0].amount, 1);
-        assert.equal(result.out[0].exchangeRatio, 150);
-        assert.equal(result.out[1].date.toISOString(), transactions[6].date.toISOString());
-        assert.equal(result.out[1].amount, 10);
-        assert.equal(result.out[1].exchangeRatio, 20);
+        assert.equal(result['BTC'].out[0].date.toISOString(), transactions[3].date.toISOString());
+        assert.equal(result['BTC'].out[0].amount, 1);
+        assert.equal(result['BTC'].out[0].exchangeRatio, 150);
+        assert.equal(result['ETH'].out[0].date.toISOString(), transactions[6].date.toISOString());
+        assert.equal(result['ETH'].out[0].amount, 10);
+        assert.equal(result['ETH'].out[0].exchangeRatio, 20);
 
         done();
       }, (err) => {

@@ -4,10 +4,10 @@
  * Module dependencies.
  */
 
-let app = require('../src/app');
-let log = require('../src/log');
-let config = require('../src/config');
-let mongodb = require('../src/config/database');
+let app = require('../server/src/app');
+let log = require('../server/src/log');
+let config = require('../server/src/config');
+let mongodb = require('../server/src/config/database');
 let http = require('http');
 
 /**

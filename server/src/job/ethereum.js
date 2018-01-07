@@ -11,8 +11,8 @@ const transform = (tx) => {
   return new Transaction({
     externalId: tx.hash.toLowerCase(),
     date: tx.received,
-    from: ('0x' + tx.outputs[0].addresses[0]).toLowerCase(),
-    to: ('0x' + tx.inputs[0].addresses[0]).toLowerCase(),
+    from: ('0x' + tx.inputs[0].addresses[0]).toLowerCase(),
+    to: ('0x' + tx.outputs[0].addresses[0]).toLowerCase(),
     fee: tx.fees,
     amount: tx.total,
     description: 'Automatically imported at ' + new Date().toISOString(),

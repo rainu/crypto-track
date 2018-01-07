@@ -4,14 +4,14 @@
  * Module dependencies.
  */
 
-const log = require('../src/log');
-const config = require('../src/config');
-const mongodb = require('../src/config/database');
-const Watch = require('../src/model/watch');
+const log = require('../server/src/log');
+const config = require('../server/src/config');
+const mongodb = require('../server/src/config/database');
+const Watch = require('../server/src/model/watch');
 
 const Jobs = {
-  BTC: require('../src/job/bitcoin'),
-  ETH: require('../src/job/ethereum'),
+  BTC: require('../server/src/job/bitcoin'),
+  ETH: require('../server/src/job/ethereum'),
 };
 
 let loadedWatches = {};

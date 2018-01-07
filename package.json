@@ -5,7 +5,8 @@
   "scripts": {
     "web": "node ./bin/www",
     "watcher": "node ./bin/watcher.js",
-    "test": "mocha --recursive"
+    "test": "mocha server/test --recursive",
+    "build": "webpack --progress --hide-modules --config config/production.webpack.config.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -20,6 +21,20 @@
     "mongoose": "^4.13.6",
     "morgan": "^1.9.0",
     "request": "^2.83.0",
+    "vue": "^2.5.13",
     "winston": "^3.0.0-rc1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "css-loader": "^0.28.8",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.6",
+    "html-webpack-plugin": "^2.30.1",
+    "url-loader": "^0.6.2",
+    "vue-html-loader": "^1.2.4",
+    "vue-loader": "^13.6.2",
+    "vue-template-compiler": "^2.5.13",
+    "webpack": "^3.10.0"
   }
 }

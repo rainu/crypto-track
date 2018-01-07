@@ -13,6 +13,15 @@ the **server.port**, we have to define a environment variable named **CFG_SERVER
 environment variable starts with **CFG_** followed by the "config_path". Where the config path
 is UPPER-Case and each dot (.) have to be replaced with underscore (_).
 
+## Mini-doc
+
+**/build/** - Contains files needed for build and hot development  
+**/build/index_dev.html** - Template for index.html  
+**/client/** - Vue.js app source  
+**/config/** - Configuration files  
+**/public/** - Public folder served by express
+**/server/** - Server side logic  
+
 License
 -------
 

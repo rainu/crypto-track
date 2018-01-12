@@ -3,6 +3,7 @@
 const log = require('../log');
 const dbService = require('../db_service');
 const TradeType = require('../model/trade_type');
+const Currency = require('../model/currency');
 
 const extractTransactions = (wallets, trades) => {
   //here we have to return the equivalent schema which our tax_report needs
@@ -10,8 +11,10 @@ const extractTransactions = (wallets, trades) => {
   let allTx = {};
   let buyTx = [];
   let sellTx = [];
+  let walletAddresses = new Set();
 
   for(let wallet of wallets) {
+    walletAddresses.add(wallet.address);
     for (let tx of wallet.inTransactions) {
       allTx[tx._id.toString()] = tx;
     }
@@ -20,24 +23,41 @@ const extractTransactions = (wallets, trades) => {
     }
   }
 
-  //we only interested in trades
+  //transfers
+  for(let tx of Object.values(allTx)) {
+    if(tx.from && tx.to) {
+      if(walletAddresses.has(tx.from) && walletAddresses.has(tx.to)){
+        sellTx.push({
+          date: tx.date,
+          amount: 0,
+          fee: tx.normalizedFee(),
+          currency: tx.currency,
+        });
+      }
+    }
+  }
+
+  //trades
   for(let trade of trades) {
+    let inTx = allTx[trade.in.toString()];
+    let outTx = allTx[trade.out.toString()];
+    
     //if the trade contains one tx with FIAT-currencies
-    if(allTx[trade.in.toString()].currency === 'EUR'){
+    if(inTx.currency === 'EUR'){
       buyTx.push({
-        date: allTx[trade.in.toString()].date,
-        amount: allTx[trade.out.toString()].normalizedAmount(),
-        fee: allTx[trade.in.toString()].normalizedFee(),
-        currency: allTx[trade.out.toString()].currency,
-        exchangeRatio: allTx[trade.in.toString()].normalizedAmount() / allTx[trade.out.toString()].normalizedAmount(),
+        date: inTx.date,
+        amount: outTx.normalizedAmount(),
+        fee: outTx.normalizedFee(),
+        currency: outTx.currency,
+        exchangeRatio: inTx.normalizedAmount() / outTx.normalizedAmount(),
       });
-    }else if(allTx[trade.out.toString()].currency === 'EUR') {
+    }else if(outTx.currency === 'EUR') {
       sellTx.push({
-        date: allTx[trade.in.toString()].date,
-        amount: allTx[trade.in.toString()].normalizedAmount(),
-        fee: allTx[trade.out.toString()].normalizedFee(),
-        currency: allTx[trade.in.toString()].currency,
-        exchangeRatio: allTx[trade.out.toString()].normalizedAmount() / allTx[trade.in.toString()].normalizedAmount(),
+        date: inTx.date,
+        amount: inTx.normalizedAmount(),
+        fee: inTx.normalizedFee(),
+        currency: inTx.currency,
+        exchangeRatio: outTx.normalizedAmount() / inTx.normalizedAmount(),
       });
     }else if(trade.tradeType === TradeType.EXCHANGE){
       if(trade.inValue.currency !== 'EUR' || trade.outValue.currency !== 'EUR') {
@@ -46,21 +66,26 @@ const extractTransactions = (wallets, trades) => {
       }
 
       //a trade between currencies
-      sellTx.push({
-        date: allTx[trade.in.toString()].date,
-        amount: allTx[trade.in.toString()].normalizedAmount(),
-        fee: allTx[trade.in.toString()].normalizedFee(),
-        currency: allTx[trade.in.toString()].currency,
-        exchangeRatio: trade.inValue.amount / allTx[trade.in.toString()].normalizedAmount(),
-      });
+      let normalIn = Currency.minToNormal(trade.inValue.amount, trade.inValue.currency);
+      let curSellTx = {
+        date: inTx.date,
+        amount: inTx.normalizedAmount(),
+        fee: inTx.normalizedFee(),
+        currency: inTx.currency,
+        exchangeRatio: normalIn / inTx.normalizedAmount(),
+      };
 
-      buyTx.push({
-        date: allTx[trade.out.toString()].date,
-        amount: allTx[trade.out.toString()].normalizedAmount(),
-        fee: allTx[trade.out.toString()].normalizedFee(),
-        currency: allTx[trade.out.toString()].currency,
-        exchangeRatio: trade.outValue.amount / allTx[trade.out.toString()].normalizedAmount(),
-      });
+      let normalOut = Currency.minToNormal(trade.outValue.amount, trade.outValue.currency);
+      let curBuyTx = {
+        date: outTx.date,
+        amount: outTx.normalizedAmount(),
+        fee: outTx.normalizedFee(),
+        currency: outTx.currency,
+        exchangeRatio: normalOut / outTx.normalizedAmount(),
+      };
+
+      sellTx.push(curSellTx);
+      buyTx.push(curBuyTx);
     }else{
       log.warn('Unknown trade type. I don\'t know how to handle it...');
     }

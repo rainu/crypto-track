@@ -19,7 +19,12 @@ router.route('/report/:username')
               let report = TaxReporter(transactions.in, transactions.out);
               completeReport.push(...report);
             }
-            completeReport.sort((a, b) => a.sellDate - b.sellDate);
+            completeReport.sort((a, b) => {
+              if(a.sellDate - b.sellDate === 0) {
+                return a.buyDate - b.buyDate;
+              }
+              return a.sellDate - b.sellDate
+            });
 
             resp.send(completeReport);
           }, (err) => {

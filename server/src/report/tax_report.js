@@ -5,18 +5,19 @@ const moment = require('moment');
 
 const report = (sellTransaction, buyTransactions) => {
   let reports = [];
-  let leftAmount = sellTransaction.amount;
+
+  if(sellTransaction.amount === 0) {
+    //only fee: don't create a report for it
+    return reports;
+  }
 
   for(let buyTransaction of buyTransactions) {
-    let amount = leftAmount > buyTransaction.amount ? buyTransaction.amount : leftAmount;
-    leftAmount -= buyTransaction.amount;
-
     let report = {
-      amount: amount,
+      amount: buyTransaction.used,
       buyDate: buyTransaction.date,
-      buyPrice: amount * buyTransaction.exchangeRatio,
+      buyPrice: buyTransaction.used * buyTransaction.exchangeRatio,
       sellDate: sellTransaction.date,
-      sellPrice: amount * sellTransaction.exchangeRatio,
+      sellPrice: buyTransaction.used * sellTransaction.exchangeRatio,
       short: moment(buyTransaction.date).add(1, 'year') >= moment(sellTransaction.date),
       currency: buyTransaction.currency,
     };
@@ -30,20 +31,28 @@ const report = (sellTransaction, buyTransactions) => {
 
 const extractBuyTx = (sellTransaction, buyTransactions) => {
   let transactions = [];
-  let amount = sellTransaction.amount;
+  let amount = sellTransaction.amount + sellTransaction.fee;
   let found = false;
 
   while(!found) {
     let curBuyTx = buyTransactions.peek();
+    if(!curBuyTx) {
+      console.log('No Transactions available!', amount);
+      break;
+    }
+
+    let availableAmount = curBuyTx.amount - curBuyTx.spent;
     transactions.push(curBuyTx);
 
-    if(curBuyTx.amount >= amount) {
+    if(availableAmount >= amount) {
       //the end (this transaction will satisfy the sellTransaction)
       curBuyTx.spent += amount;
+      curBuyTx.used = amount;
       found = true;
     }else{
+      curBuyTx.used = availableAmount;
       curBuyTx.spent = curBuyTx.amount;
-      amount -= curBuyTx.amount;
+      amount -= availableAmount;
     }
 
     if(curBuyTx.spent === curBuyTx.amount) {

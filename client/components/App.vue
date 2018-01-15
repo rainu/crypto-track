@@ -29,7 +29,12 @@
           </grid-item>
           <grid-item :x="layout[1].x" :y="layout[1].y"
                      :w="layout[1].w" :h="layout[1].h"
-                     :i="layout[1].i" :dragAllowFrom="'.box-header'"><box>
+                     :i="layout[1].i" :dragIgnoreFrom="'.drag-ignore'">
+            <total-currencies :wallets="account.wallets"></total-currencies>
+          </grid-item>
+          <grid-item :x="layout[2].x" :y="layout[2].y"
+                     :w="layout[2].w" :h="layout[2].h"
+                     :i="layout[2].i" :dragAllowFrom="'.box-header'"><box>
             <tax-report :report="account.taxReport"></tax-report>
           </box></grid-item>
         </grid-layout>
@@ -41,13 +46,14 @@
 <script>
   import TaxReport from "./TaxReport";
   import TotalCoins from "./TotalCoins";
+  import TotalCurrencies from "./TotalCurrencies";
   import { getReport } from "../js/service/report";
   import { getAccount } from "../js/service/account";
   import { getFullWallet } from "../js/service/wallet";
 
   export default {
     components: {
-      TaxReport, TotalCoins
+      TaxReport, TotalCoins, TotalCurrencies
     },
     data: function () {
       return {
@@ -56,6 +62,7 @@
         },
         layout: [
           {"x":0,"y":0,"w":3,"h":1,"i":"totalCoins"},
+          {"x":3,"y":0,"w":3,"h":1,"i":"totalCurrencies"},
           {"x":0,"y":1,"w":12,"h":4,"i":"taxReport"},
         ],
         account: {

@@ -1,6 +1,6 @@
 <template>
   <div class="info-box">
-    <span class="info-box-icon bg-aqua"><i class="fa fa-pie-chart"></i></span>
+    <span class="info-box-icon bg-aqua"><i class="fa fa-bitcoin"></i></span>
 
     <div class="info-box-content">
       <span class="info-box-text">Gesamtwert aller Coins</span>

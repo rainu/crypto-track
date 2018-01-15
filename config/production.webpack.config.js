@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: ['./client/main.js'],
+  entry: ['./client/js/main.js'],
   output: {
     path: path.resolve(__dirname, '../public/'),
     publicPath: '/',
@@ -16,7 +16,7 @@ module.exports = {
     extensions: ['.js', '.vue'],
     alias: {
       'client': path.resolve(__dirname, '../client'),
-      'components': path.resolve(__dirname, '../clients/components'),
+      'components': path.resolve(__dirname, '../client/components'),
       'vue$': 'vue/dist/vue.common.js'
     }
   },
@@ -35,6 +35,9 @@ module.exports = {
       loader: 'babel-loader',
       exclude: /node_modules/
     }, {
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader']
+    }, {
       test: /\.html$/,
       loader: 'vue-html-loader'
     }, {
@@ -44,6 +47,18 @@ module.exports = {
         limit: 10000,
         name: '[name].[ext]?[hash]'
       }
+    }, {
+      test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+    }, {
+      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+    }, {
+      test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'file-loader'
+    }, {
+      test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
     }]
   },
   plugins: [
@@ -65,7 +80,12 @@ module.exports = {
       template: path.resolve(__dirname, '../client/index.html'),
       inject: true
     }),
-    new ExtractTextPlugin('build/style.css')
+    new ExtractTextPlugin('build/style.css'),
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      moment: "moment"
+    })
   ],
   devtool: 'source-map'
 };

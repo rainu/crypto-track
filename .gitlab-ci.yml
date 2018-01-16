@@ -15,5 +15,6 @@ test:
     - name: mongo
       alias: mongo
   script:
+    - apt-get update && apt-get install -y git
     - npm install
     - npm test

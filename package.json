@@ -5,6 +5,7 @@
   "scripts": {
     "web": "node ./bin/www",
     "watcher": "node ./bin/watcher.js",
+    "course": "node ./bin/course.js",
     "test": "mocha server/test --recursive",
     "build": "webpack --progress --hide-modules --config config/production.webpack.config.js",
     "dev-client": "webpack --watch --progress --hide-modules --config config/production.webpack.config.js"

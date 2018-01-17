@@ -19,6 +19,7 @@ app.use('/api/', require('./routes/account'));
 app.use('/api/', require('./routes/import'));
 app.use('/api/', require('./routes/backup'));
 app.use('/api/', require('./routes/report'));
+app.use('/api/', require('./routes/course'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

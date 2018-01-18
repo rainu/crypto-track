@@ -1,5 +1,10 @@
 "use strict";
 
+const currencies = {
+  'EUR': true,
+  'USD': true,
+};
+
 const currencyFactors = {
   'EUR': 1E-2,
   'BTC': 1E-8,
@@ -24,4 +29,10 @@ module.exports = {
 
     return amount;
   },
+  isCurrency(currency) {
+    return currencies.hasOwnProperty(currency.toUpperCase());
+  },
+  isCoin(currency) {
+    return !isCurrency(currency);
+  }
 };

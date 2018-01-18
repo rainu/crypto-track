@@ -14,7 +14,7 @@ f<template>
 
   export default {
     props: {
-      wallets:{
+      balances:{
         type: Object,
         required: true,
       },
@@ -30,14 +30,7 @@ f<template>
     },
     computed: {
       total() {
-        let total = 0;
-        for (let wallet of this.wallets) {
-          if (wallet.balances[this.currency]) {
-            total += wallet.balances[this.currency]
-          }
-        }
-
-        return minToNormal(total, this.currency);
+        return minToNormal(this.balances[this.currency], this.currency);
       }
     }
   }

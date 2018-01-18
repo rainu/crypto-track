@@ -8,7 +8,7 @@
     "course": "node ./bin/course.js",
     "test": "mocha server/test --recursive",
     "build": "webpack --progress --hide-modules --config config/production.webpack.config.js",
-    "dev-client": "webpack --watch --progress --hide-modules --config config/production.webpack.config.js"
+    "dev-client": "webpack --watch --progress --hide-modules --config config/webpack.config.js"
   },
   "dependencies": {
     "admin-lte": "^2.4.2",
@@ -30,6 +30,7 @@
     "vue": "^2.5.13",
     "vue-good-table": "^1.18.6",
     "vue-grid-layout": "^2.1.11",
+    "vue-route": "^1.5.1",
     "winston": "^3.0.0-rc1"
   },
   "devDependencies": {

@@ -22,5 +22,5 @@ Vue.component('grid-item', GridItem);
 
 new Vue({
   el: '#app',
-  components: { App }
+  components: { App },
 });

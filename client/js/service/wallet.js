@@ -36,11 +36,22 @@ const getBalances = (wallet) => {
   return balances;
 };
 
+const getCoins = (wallet) => {
+  let symbols = [];
+  for(let coin of Object.keys(wallet.balances)) {
+    if(coin.toUpperCase() === 'EUR') continue;
+
+    symbols.push(coin);
+  }
+  return symbols;
+};
+
 const getFullWallet = (id, callback) => {
   $.ajax({
     url: `/api/wallet/${id}/full`,
   }).then((fullWallet) => {
     fullWallet.balances = getBalances(fullWallet);
+    fullWallet.coins = getCoins(fullWallet);
 
     callback(fullWallet);
   });

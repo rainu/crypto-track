@@ -21,63 +21,47 @@
     </aside>
     <div class="content-wrapper">
       <section class="content" style="width: 100%;">
-        <grid-layout :layout="layout" :col-num="12" :rowHeight="100">
-          <grid-item :x="layout[0].x" :y="layout[0].y"
-                     :w="layout[0].w" :h="layout[0].h"
-                     :i="layout[0].i" :dragIgnoreFrom="'.drag-ignore'">
-            <total-coins :wallets="account.wallets" :courses="courses"></total-coins>
-          </grid-item>
-          <grid-item :x="layout[1].x" :y="layout[1].y"
-                     :w="layout[1].w" :h="layout[1].h"
-                     :i="layout[1].i" :dragIgnoreFrom="'.drag-ignore'">
-            <total-currencies :wallets="account.wallets"></total-currencies>
-          </grid-item>
-          <grid-item :x="layout[2].x" :y="layout[2].y"
-                     :w="layout[2].w" :h="layout[2].h"
-                     :i="layout[2].i" :dragAllowFrom="'.box-header'"><box>
-            <tax-report :report="account.taxReport"></tax-report>
-          </box></grid-item>
-        </grid-layout>
+        <dashboard :wallets="account.wallets" :courses="courses"></dashboard>
       </section>
     </div>
   </div>
 </template>
 
 <script>
+  import Dashboard from "./dashboard/Dashboard"
   import TaxReport from "./TaxReport";
-  import TotalCoins from "./TotalCoins";
-  import TotalCurrencies from "./TotalCurrencies";
+  import { Scheduler } from "../js/service/scheduler";
   import { getReport } from "../js/service/report";
   import { getAccount } from "../js/service/account";
   import { getFullWallet } from "../js/service/wallet";
+  import { getCourse } from "../js/service/course";
 
   export default {
     components: {
-      TaxReport, TotalCoins, TotalCurrencies
+      Dashboard, TaxReport
     },
     data: function () {
       return {
-        gridSize: {
-          w: 100, h: 100
-        },
-        layout: [
-          {"x":0,"y":0,"w":3,"h":1,"i":"totalCoins"},
-          {"x":3,"y":0,"w":3,"h":1,"i":"totalCurrencies"},
-          {"x":0,"y":1,"w":12,"h":4,"i":"taxReport"},
-        ],
         account: {
           name: "",
           wallets: [],
+          coins: [],
           taxReport: [],
         },
-        courses: {
-          'BTCEUR': 11513,
-          'ETHEUR': 1075,
-          'BCHEUR': 2026,
-          'VIUEUR': 0.05,
-          'OMGEUR': 18.86,
+        courses: {},
+        services: {
+          scheduler: new Scheduler(),
         }
       };
+    },
+    methods: {
+      updateCourse(coin){
+        const ctx = this;
+        getCourse(coin, 'EUR', (course) => {
+          const symbol = coin.toUpperCase() + 'EUR';
+          ctx.$set(ctx.courses, symbol, course.course);
+        });
+      }
     },
     computed: {
       transactions() {
@@ -88,19 +72,37 @@
         return tx;
       }
     },
-    mounted: function () {
-      let ctx = this;
-
-      getReport("rainu", (reportEntry) => {
-        ctx.account.taxReport.push(reportEntry);
+    created() {
+      // let ctx = this;
+      this.services.scheduler.executeJob('getReport', () => {
+        getReport("rainu", (reportEntry) => {
+          this.account.taxReport.push(reportEntry);
+        });
       });
-      getAccount("rainu", (account) => {
-        ctx.account.name = account.name;
-        for(let wallet of account.wallets) {
-          getFullWallet(wallet._id, (fullWallet) => {
-            ctx.account.wallets.push(fullWallet);
-          });
-        }
+
+      this.services.scheduler.executeJob('getAccount', () => {
+        getAccount("rainu", (account) => {
+          this.account.name = account.name;
+          for(let wallet of account.wallets) {
+
+            this.services.scheduler.executeJob('getAccount' + wallet.address, () => {
+              getFullWallet(wallet._id, (fullWallet) => {
+                for(let coin of fullWallet.coins) {
+                  if(!this.account.coins.includes(coin)){
+                    this.account.coins.push(coin);
+
+                    //enable job
+                    this.services.scheduler.enableJob('updateCourse_' + coin, 60000, () => {
+                      this.updateCourse(coin);
+                    });
+                  }
+                }
+                this.account.wallets.push(fullWallet);
+              });
+            });
+
+          }
+        });
       });
     }
   };

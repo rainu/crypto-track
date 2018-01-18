@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import {minToNormal, normalToMin} from '../../server/src/model/currency'
+  import {minToNormal, normalToMin} from '../../../../server/src/model/currency'
 
   export default {
     props: {

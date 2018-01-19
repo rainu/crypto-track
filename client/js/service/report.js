@@ -1,8 +1,8 @@
+import axios from './../backend.js';
+
 const getReport = (accountname, callback) => {
-  $.ajax({
-    url: `/api/report/${accountname}`,
-  }).then((data) => {
-    for (let entry of data) {
+  axios.get(`/report/${accountname}`).then(res => {
+    for (let entry of res.data) {
       entry.sellDate = moment(entry.sellDate);
       entry.buyDate = moment(entry.buyDate);
 
@@ -11,22 +11,4 @@ const getReport = (accountname, callback) => {
   });
 };
 
-const getAccount = (accountname, callback) => {
-  $.ajax({
-    url: `/api/account/${accountname}`,
-  }).then((account) => {
-    callback(account);
-  });
-};
-
-const getFullWallet = (id, callback) => {
-  $.ajax({
-    url: `/api/wallet/${wallet._id}/full`,
-  }).then((fullWallet) => {
-    callback(fullWallet);
-  });
-};
-
-export {
-  getReport, getAccount, getFullWallet,
-}
+export default getReport;

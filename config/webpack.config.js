@@ -78,7 +78,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery",
-      moment: "moment"
+      moment: "moment",
     })
   ],
   devtool: 'source-map'

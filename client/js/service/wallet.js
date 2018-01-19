@@ -1,3 +1,6 @@
+import axios from './../backend.js';
+import {isCurrency} from '../../../server/src/model/currency'
+
 const getTxMappings = (wallet) => {
   let coinMapping = {};
   let knownIds = {};
@@ -39,7 +42,17 @@ const getBalances = (wallet) => {
 const getCoins = (wallet) => {
   let symbols = [];
   for(let coin of Object.keys(wallet.balances)) {
-    if(coin.toUpperCase() === 'EUR') continue;
+    if(isCurrency(coin)) continue;
+
+    symbols.push(coin);
+  }
+  return symbols;
+};
+
+const getCurrencies = (wallet) => {
+  let symbols = [];
+  for(let coin of Object.keys(wallet.balances)) {
+    if(!isCurrency(coin)) continue;
 
     symbols.push(coin);
   }
@@ -47,16 +60,13 @@ const getCoins = (wallet) => {
 };
 
 const getFullWallet = (id, callback) => {
-  $.ajax({
-    url: `/api/wallet/${id}/full`,
-  }).then((fullWallet) => {
-    fullWallet.balances = getBalances(fullWallet);
-    fullWallet.coins = getCoins(fullWallet);
+  axios.get(`/wallet/${id}/full`).then(res => {
+    res.data.balances = getBalances(res.data);
+    res.data.coins = getCoins(res.data);
+    res.data.currencies = getCurrencies(res.data);
 
-    callback(fullWallet);
+    callback(res.data);
   });
 };
 
-export {
-  getFullWallet,
-}
+export default getFullWallet;

@@ -2,6 +2,8 @@ import './lib/css'
 import './lib/script'
 
 import Vue from 'vue'
+import { store } from './store.js';
+
 import {fnumber, number, euro, date} from './filter'
 import VueGoodTable from 'vue-good-table';
 import Box from '../components/general/Box'
@@ -23,4 +25,5 @@ Vue.component('grid-item', GridItem);
 new Vue({
   el: '#app',
   components: { App },
+  store: store,
 });

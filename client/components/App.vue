@@ -21,7 +21,7 @@
     </aside>
     <div class="content-wrapper">
       <section class="content" style="width: 100%;">
-        <dashboard :wallets="account.wallets" :courses="courses"></dashboard>
+        <dashboard :wallets="wallets" :courses="courses"></dashboard>
       </section>
     </div>
   </div>
@@ -30,11 +30,7 @@
 <script>
   import Dashboard from "./dashboard/Dashboard"
   import TaxReport from "./TaxReport";
-  import { Scheduler } from "../js/service/scheduler";
-  import { getReport } from "../js/service/report";
-  import { getAccount } from "../js/service/account";
-  import { getFullWallet } from "../js/service/wallet";
-  import { getCourse } from "../js/service/course";
+  import { mapState, mapGetters, mapActions } from 'vuex';
 
   export default {
     components: {
@@ -42,68 +38,42 @@
     },
     data: function () {
       return {
-        account: {
-          name: "",
-          wallets: [],
-          coins: [],
-          taxReport: [],
-        },
-        courses: {},
-        services: {
-          scheduler: new Scheduler(),
-        }
       };
     },
-    methods: {
-      updateCourse(coin){
-        const ctx = this;
-        getCourse(coin, 'EUR', (course) => {
-          const symbol = coin.toUpperCase() + 'EUR';
-          ctx.$set(ctx.courses, symbol, course.course);
-        });
-      }
-    },
     computed: {
-      transactions() {
-        let tx = [];
-        for(let wallet of this.account.wallets) {
-          tx.push(...wallet.transactions);
+      ...mapState({
+        account: state => state.account.account,
+        courses: state => state.course.courses,
+        wallets: state => state.wallet.wallets,
+        coins: state => state.wallet.coins,
+        taxReport: state => state.taxReport.report,
+      }),
+      ...mapGetters({
+        transactions: state => state.getters.transactions,
+      }),
+    },
+    watch: {
+      account(account){
+        for(let wallet of account.wallets) {
+          this.$store.dispatch('wallet/getFullWallet', wallet._id);
         }
-        return tx;
+      },
+      coins(newCoins){
+        for(let coin of newCoins) {
+          this.$store.dispatch('job/add', {
+            name: `courseUpdater_${coin}`,
+            execute: () => {
+              this.$store.dispatch('course/update', {
+                coin: coin, currency: 'EUR',
+              });
+            }
+          });
+        }
       }
     },
     created() {
-      // let ctx = this;
-      this.services.scheduler.executeJob('getReport', () => {
-        getReport("rainu", (reportEntry) => {
-          this.account.taxReport.push(reportEntry);
-        });
-      });
-
-      this.services.scheduler.executeJob('getAccount', () => {
-        getAccount("rainu", (account) => {
-          this.account.name = account.name;
-          for(let wallet of account.wallets) {
-
-            this.services.scheduler.executeJob('getAccount' + wallet.address, () => {
-              getFullWallet(wallet._id, (fullWallet) => {
-                for(let coin of fullWallet.coins) {
-                  if(!this.account.coins.includes(coin)){
-                    this.account.coins.push(coin);
-
-                    //enable job
-                    this.services.scheduler.enableJob('updateCourse_' + coin, 60000, () => {
-                      this.updateCourse(coin);
-                    });
-                  }
-                }
-                this.account.wallets.push(fullWallet);
-              });
-            });
-
-          }
-        });
-      });
+      this.$store.dispatch('taxReport/getReport', 'rainu');
+      this.$store.dispatch('account/getAccount', 'rainu');
     }
   };
 </script>

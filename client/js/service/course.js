@@ -1,11 +1,9 @@
+import axios from './../backend.js';
+
 const getCourse = (coin, currency, callback) => {
   const symbol = coin.toUpperCase() + currency.toUpperCase();
 
-  $.ajax({
-    url: `/api/course/${symbol}`,
-  }).then((course) => {
-    callback(course);
-  });
+  axios.get(`/course/${symbol}`).then(res => callback(res.data));
 };
 
 export {

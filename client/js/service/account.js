@@ -1,11 +1,7 @@
+import axios from './../backend.js';
+
 const getAccount = (accountname, callback) => {
-  $.ajax({
-    url: `/api/account/${accountname}`,
-  }).then((account) => {
-    callback(account);
-  });
+  axios.get(`/account/${accountname}`).then(res => callback(res.data));
 };
 
-export {
-   getAccount,
-}
+export default getAccount;

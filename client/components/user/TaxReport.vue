@@ -26,8 +26,9 @@
 </template>
 
 <script>
+  import { mapState, mapGetters, mapActions } from 'vuex';
+
   export default {
-    props: ['report'],
     data() {
       return {
         columns: [
@@ -81,6 +82,9 @@
       }
     },
     computed: {
+      ...mapState({
+        report: s => s.taxReport.report,
+      }),
       totalSell() {
         let total = 0;
         for(let entry of this.report) {
@@ -102,6 +106,9 @@
         }
         return total;
       }
+    },
+    created() {
+      this.$store.dispatch('taxReport/getReport', this.$route.params.username);
     }
   }
 </script>

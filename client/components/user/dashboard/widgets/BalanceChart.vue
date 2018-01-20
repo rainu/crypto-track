@@ -5,8 +5,8 @@
 </template>
 
 <script>
-  import PieChart from './../../chart/ReactivePie'
-  import {minToNormal} from '../../../../server/src/model/currency'
+  import PieChart from '../../../chart/ReactivePie'
+  import {minToNormal} from '../../../../../server/src/model/currency'
   import {mapGetters, mapState} from 'vuex';
   import randomColor from 'randomcolor'
 

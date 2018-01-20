@@ -16,7 +16,20 @@
     </header>
     <aside class="main-sidebar">
       <section class="sidebar">
-        <ul class="sidebar-menu tree"></ul>
+        <ul class="sidebar-menu tree" data-widget="tree">
+          <router-link :to="{name: 'dashboard'}" tag="li" active-class="active" exact>
+            <a>
+              <i class="fa fa-dashboard"></i>
+              <span>Dashboard</span>
+            </a>
+          </router-link>
+          <router-link :to="{name: 'taxReport'}" tag="li" active-class="active" exact>
+            <a>
+              <i class="fa fa-line-chart"></i>
+              <span>Steuer-Report</span>
+            </a>
+          </router-link>
+        </ul>
       </section>
     </aside>
     <div class="content-wrapper">
@@ -28,7 +41,7 @@
 </template>
 
 <script>
-  import { mapState, mapGetters, mapActions } from 'vuex';
+  import {mapGetters, mapState} from 'vuex';
 
   //entrypoint: here we only load the basic-data such like the account and there wallets etc.
   export default {
@@ -64,7 +77,6 @@
       }
     },
     created() {
-      this.$store.dispatch('taxReport/getReport', this.$route.params.username);
       this.$store.dispatch('account/getAccount', this.$route.params.username);
     }
   };

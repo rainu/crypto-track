@@ -13,7 +13,7 @@ const Dashboard = resolve => {
 const TaxReport = resolve => {
   require.ensure(['../components/user/TaxReport.vue'], () => {
     resolve(require('../components/user/TaxReport.vue'));
-  }, 'user');
+  });
 };
 
 export const routes = [

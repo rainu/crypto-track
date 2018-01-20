@@ -1,4 +1,4 @@
-import requestAccount from '../service/account';
+import { getAccount } from '../service/account';
 
 const state = {
   account: {},
@@ -15,7 +15,7 @@ const mutations = {
 
 const actions = {
   getAccount(ctx, username) {
-    requestAccount(username, account => {
+    getAccount(username, account => {
       ctx.commit('update', account);
     });
   }

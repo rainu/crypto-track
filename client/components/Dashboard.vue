@@ -27,11 +27,10 @@
 </template>
 
 <script>
-  import AccountValue from "./widgets/AccountValue";
-  import TotalCoins from "./widgets/TotalCoins";
-  import TotalCurrency from "./widgets/TotalCurrency";
-  import BalanceChart from "./widgets/BalanceChart";
-  import { mapState, mapGetters, mapActions } from 'vuex';
+  import AccountValue from "./dashboard/widgets/AccountValue";
+  import TotalCoins from "./dashboard/widgets/TotalCoins";
+  import TotalCurrency from "./dashboard/widgets/TotalCurrency";
+  import BalanceChart from "./dashboard/widgets/BalanceChart";
 
   export default {
     name: "dashboard",

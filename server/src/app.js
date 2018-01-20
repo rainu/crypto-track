@@ -23,6 +23,12 @@ app.use('/api/', require('./routes/course'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  //to use the vue-router history mode (url without hash)
+  if(!req.originalUrl.startsWith('/api/')){
+    res.sendFile(path.join(__dirname, '../../public/index.html'));
+    return;
+  }
+
   let err = new Error('Not Found');
   err.status = 404;
   next(err);

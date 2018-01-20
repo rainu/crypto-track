@@ -89,6 +89,18 @@ router.route('/account/:username/wallet/exchange/:exchange')
   });
 
 router.route('/account')
+  .get((req, resp) => {
+    Account.find({}).then(accounts => {
+      let accountNames = [];
+      for(let account of accounts) {
+        accountNames.push(account.username);
+      }
+      resp.send(accountNames);
+    }, err => {
+      resp.status(HttpStatus.NOT_FOUND);
+      resp.end();
+    });
+  })
   .post((req, resp) => {
     let account = new Account(req.body);
     account.save().then(

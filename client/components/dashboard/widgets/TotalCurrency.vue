@@ -11,13 +11,10 @@ f<template>
 
 <script>
   import {minToNormal, normalToMin} from '../../../../server/src/model/currency'
+  import { mapState, mapGetters, mapActions } from 'vuex';
 
   export default {
     props: {
-      balances:{
-        type: Object,
-        required: true,
-      },
       currency: {
         type: String,
         required: false,
@@ -29,6 +26,9 @@ f<template>
       };
     },
     computed: {
+      ...mapGetters({
+        balances: 'wallet/balances',
+      }),
       total() {
         return minToNormal(this.balances[this.currency], this.currency);
       }

@@ -5,3 +5,4 @@ import 'jquery-ui/themes/base/datepicker.css'
 
 import 'admin-lte'
 import 'chart.js'
+import 'chartjs-plugin-datalabels'

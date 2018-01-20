@@ -20,6 +20,20 @@ const getters = {
     });
 
     return tx;
+  },
+  balances(state) {
+    let balances = {};
+    for(let wallet of state.wallets) {
+      for(let coin of Object.keys(wallet.balances)){
+        if(!balances.hasOwnProperty(coin)) {
+          balances[coin] = 0;
+        }
+
+        balances[coin] += wallet.balances[coin];
+      }
+    }
+
+    return balances;
   }
 };
 

@@ -3,17 +3,25 @@
     <grid-item :x="layout[0].x" :y="layout[0].y"
                :w="layout[0].w" :h="layout[0].h"
                :i="layout[0].i" :dragIgnoreFrom="'.drag-ignore'">
-      <total-coins :balances="balances" :courses="courses"></total-coins>
+      <total-coins></total-coins>
     </grid-item>
     <grid-item :x="layout[1].x" :y="layout[1].y"
                :w="layout[1].w" :h="layout[1].h"
                :i="layout[1].i" :dragIgnoreFrom="'.drag-ignore'">
-      <total-currency :balances="balances"></total-currency>
+      <total-currency></total-currency>
     </grid-item>
     <grid-item :x="layout[2].x" :y="layout[2].y"
                :w="layout[2].w" :h="layout[2].h"
                :i="layout[2].i" :dragIgnoreFrom="'.drag-ignore'">
-      <account-value :balances="balances" :courses="courses"></account-value>
+      <account-value></account-value>
+    </grid-item>
+    <grid-item :x="layout[3].x" :y="layout[3].y"
+               :w="layout[3].w" :h="layout[3].h"
+               :i="layout[3].i" :dragIgnoreFrom="'.drag-ignore'">
+      <box>
+        <span slot="title">Wert pro Währung</span>
+        <balance-chart></balance-chart>
+      </box>
     </grid-item>
   </grid-layout>
 </template>
@@ -22,11 +30,13 @@
   import AccountValue from "./widgets/AccountValue";
   import TotalCoins from "./widgets/TotalCoins";
   import TotalCurrency from "./widgets/TotalCurrency";
+  import BalanceChart from "./widgets/BalanceChart";
+  import { mapState, mapGetters, mapActions } from 'vuex';
 
   export default {
     name: "dashboard",
     components: {
-      AccountValue, TotalCoins, TotalCurrency
+      AccountValue, TotalCoins, TotalCurrency, BalanceChart
     },
     props: {
       gridSize: {
@@ -35,14 +45,6 @@
           w: 100, h: 100
         }
       },
-      wallets: {
-        type: Object,
-        required: true
-      },
-      courses: {
-        type: Object,
-        required: true
-      }
     },
     data: function () {
       return {
@@ -50,25 +52,10 @@
           {"x":0,"y":0,"w":3,"h":1,"i":"totalCoins"},
           {"x":3,"y":0,"w":3,"h":1,"i":"totalCurrencies"},
           {"x":6,"y":0,"w":3,"h":1,"i":"accountValue"},
+          {"x":0,"y":1,"w":2,"h":3,"i":"balanceChart"},
         ],
       };
     },
-    computed: {
-      balances() {
-        let balances = {};
-        for(let wallet of this.wallets) {
-          for(let coin of Object.keys(wallet.balances)){
-            if(!balances.hasOwnProperty(coin)) {
-              balances[coin] = 0;
-            }
-
-            balances[coin] += wallet.balances[coin];
-          }
-        }
-
-        return balances;
-      },
-    }
   }
 </script>
 

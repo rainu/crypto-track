@@ -49,7 +49,7 @@
         taxReport: state => state.taxReport.report,
       }),
       ...mapGetters({
-        transactions: state => state.getters.transactions,
+        transactions: 'wallet/transactions',
       }),
     },
     watch: {

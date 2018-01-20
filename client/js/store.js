@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import meta from './store/meta';
 import call from './store/call';
 import job from './store/job';
 import course from './store/course';
@@ -12,6 +13,10 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   modules: {
+    meta: {
+      namespaced: true,
+      ...meta
+    },
     call: {
       namespaced: true,
       ...call

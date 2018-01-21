@@ -1,5 +1,9 @@
 image: node:alpine
 
+stages:
+  - build
+  - deploy
+
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
 cache:
@@ -10,7 +14,7 @@ variables:
   CFG_MONGO_HOST: "mongo"
 
 test:
-  stage: test
+  stage: build
   services:
     - name: mongo
       alias: mongo

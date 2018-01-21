@@ -47,7 +47,7 @@
                     <li v-for="job in jobs">
                       <a href="javascript:void(0);">
                         <i class="fa fa-tasks"></i>
-                        {{ job.name }}
+                        {{ job.name }} ({{ job.interval / 1000}} sek)
                       </a>
                     </li>
                   </ul>
@@ -88,7 +88,7 @@
       <div class="pull-right hidden-xs">
         <b>Version</b> {{version}}
       </div>
-      <strong>© Rainu</strong> {{builtDate.format('DD.MM.YY HH:mm')}}
+      <strong>© Rainu</strong> {{builtDate ? builtDate.format('DD.MM.YY HH:mm') : '-'}}
     </footer>
     <!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
@@ -127,6 +127,7 @@
         for(let coin of newCoins) {
           this.$store.dispatch('job/add', {
             name: `courseUpdater_${coin}`,
+            interval: 60000,
             execute: () => {
               this.$store.dispatch('course/update', {
                 coin: coin, currency: 'EUR',

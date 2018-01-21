@@ -23,6 +23,9 @@ const actions = {
 
     ctx.commit('addJob', job);
     job.execute();
+    if(job.interval) {
+      job.intervalHandle = setInterval(job.execute, job.interval);
+    }
   }
 };
 

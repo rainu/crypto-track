@@ -7,42 +7,36 @@
 const log = require('../server/src/log');
 const config = require('../server/src/config');
 const mongodb = require('../server/src/config/database');
-const Course = require('../server/src/model/course');
-const request = require('../server/src/job/request_repeater');
 
-const URL = 'https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=0';
-const tick = 1000 * 60 * 10; //10min
+const updateDaylieCourse = require('../server/src/job/course/ticker');
+const updateHistoricalCourse = require('../server/src/job/course/historical');
 
-const job = () => {
+const daylieTick = 1000 * 60 * 10; //10min
+const historicalTick = 1000 * 60 * 60 * 6; //6h
+
+const daylieJob = () => {
   log.info("Update courses...");
 
-  request(URL).then((response) => {
-    let result = JSON.parse(response.body);
-
-    for(let coin of result) {
-      const symbol =  coin.symbol + 'EUR';
-
-      Course.findOneAndUpdate(
-        { symbol: symbol },
-        {
-          symbol: symbol,
-          date: new Date(coin.last_updated * 1000),
-          course: coin.price_eur * 1,
-        },
-        { upsert: true}, (err, coinDoc) => {
-          if(err){
-            log.error("Could not save course!", err);
-          } else {
-            log.debug("Saved new course!");
-          }
-        });
-    }
-
-    setTimeout(job, tick);
-  }, (err) => {
-    log.err('Error while requesting courses.', err);
-    setTimeout(job, tick);
+  updateDaylieCourse().then(() => {
+    log.info("Update courses ... done!");
+    setTimeout(daylieJob, daylieTick);
+  }, err => {
+    log.error('Error while requesting courses.', err);
+    setTimeout(daylieJob, daylieTick);
   });
 };
 
-job();
+const historicalJob = () => {
+  log.info("Update historical courses...");
+
+  updateHistoricalCourse().then(() => {
+    log.info("Update historical courses ... done!");
+    setTimeout(historicalJob, historicalTick);
+  }, err => {
+    log.error('Error while requesting historical courses.', err);
+    setTimeout(historicalJob, historicalTick);
+  });
+};
+
+daylieJob();
+historicalJob();

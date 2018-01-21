@@ -25,4 +25,10 @@ if (process.env.NODE_ENV !== 'production') {
   }));
 }
 
+const origErr = logger.error;
+logger.error = function(message, err) {
+  if(err) origErr.call(logger, message + ' ' + err.stack);
+  else origErr.call(logger, message);
+};
+
 module.exports = logger;

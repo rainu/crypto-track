@@ -8,21 +8,21 @@ const log = require('../server/src/log');
 const config = require('../server/src/config');
 const mongodb = require('../server/src/config/database');
 
-const updateDaylieCourse = require('../server/src/job/course/ticker');
+const updateDailyCourse = require('../server/src/job/course/ticker');
 const updateHistoricalCourse = require('../server/src/job/course/historical');
 
-const daylieTick = 1000 * 60 * 10; //10min
+const dailyTick = 1000 * 60 * 10; //10min
 const historicalTick = 1000 * 60 * 60 * 6; //6h
 
-const daylieJob = () => {
+const dailyJob = () => {
   log.info("Update courses...");
 
-  updateDaylieCourse().then(() => {
+  updateDailyCourse().then(() => {
     log.info("Update courses ... done!");
-    setTimeout(daylieJob, daylieTick);
+    setTimeout(dailyJob, dailyTick);
   }, err => {
     log.error('Error while requesting courses.', err);
-    setTimeout(daylieJob, daylieTick);
+    setTimeout(dailyJob, dailyTick);
   });
 };
 
@@ -38,5 +38,5 @@ const historicalJob = () => {
   });
 };
 
-daylieJob();
+dailyJob();
 historicalJob();

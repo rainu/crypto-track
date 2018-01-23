@@ -3,10 +3,18 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "web": "node ./bin/www",
-    "watcher": "node ./bin/watcher.js",
-    "course": "node ./bin/course.js",
-    "test": "mocha server/test --recursive",
+    "web": "node ./server/web/run.js",
+    "test-web": "mocha server/web/test --recursive",
+    "build-web": "webpack --progress --config server/web/production.webpack.config.js",
+
+    "watcher": "node ./server/watch/run.js",
+    "test-watcher": "mocha server/watch/test --recursive",
+    "build-watcher": "webpack --progress --config server/watch/production.webpack.config.js",
+
+    "course": "node ./server/course/run.js",
+    "test-course": "mocha server/course/test --recursive",
+    "build-course": "webpack --progress --config server/course/production.webpack.config.js",
+
     "build": "webpack --progress --hide-modules --config config/production.webpack.config.js",
     "dev-client": "webpack --watch --progress --hide-modules --config config/webpack.config.js"
   },

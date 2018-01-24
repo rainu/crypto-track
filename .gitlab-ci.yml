@@ -38,7 +38,7 @@ build:
     expire_in: 5 minutes
 
 dockerrize:
-  image: docker:latest
+  image: docker/compose:1.18.0
   stage: dockerrize
   script:
     - docker-compose build

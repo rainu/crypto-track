@@ -10,7 +10,7 @@ f<template>
 </template>
 
 <script>
-  import {minToNormal, normalToMin} from '../../../../../server/src/model/currency'
+  import {minToNormal, normalToMin} from '../../../../../server/web/src/model/currency'
   import { mapState, mapGetters, mapActions } from 'vuex';
 
   export default {

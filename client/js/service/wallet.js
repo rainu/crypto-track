@@ -1,5 +1,5 @@
 import axios from './../backend.js';
-import {isCurrency} from '../../../server/src/model/currency'
+import {isCurrency} from '../../../server/web/src/model/currency'
 
 const getTxMappings = (wallet) => {
   let coinMapping = {};

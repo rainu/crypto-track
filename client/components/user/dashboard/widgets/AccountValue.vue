@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import {minToNormal, isCurrency} from '../../../../../server/src/model/currency'
+  import {minToNormal, isCurrency} from '../../../../../server/web/src/model/currency'
   import { mapState, mapGetters, mapActions } from 'vuex';
 
   export default {

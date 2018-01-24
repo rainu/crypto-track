@@ -5,18 +5,17 @@
   "scripts": {
     "web": "node ./server/web/run.js",
     "test-web": "mocha server/web/test --recursive",
-    "build-web": "webpack --progress --config server/web/production.webpack.config.js",
-
+    "build-web": "webpack --progress --config server/web/production.webpack.config.js && node minify-package-json.js server/web/dist && cp -r config server/web/dist/",
     "watcher": "node ./server/watch/run.js",
     "test-watcher": "mocha server/watch/test --recursive",
-    "build-watcher": "webpack --progress --config server/watch/production.webpack.config.js",
-
+    "build-watcher": "webpack --progress --config server/watch/production.webpack.config.js && node minify-package-json.js server/watch/dist && cp -r config server/watch/dist/",
     "course": "node ./server/course/run.js",
     "test-course": "mocha server/course/test --recursive",
-    "build-course": "webpack --progress --config server/course/production.webpack.config.js",
-
-    "build": "webpack --progress --hide-modules --config config/production.webpack.config.js",
-    "dev-client": "webpack --watch --progress --hide-modules --config config/webpack.config.js"
+    "build-course": "webpack --progress --config server/course/production.webpack.config.js && node minify-package-json.js server/course/dist && cp -r config server/course/dist/",
+    "build-client": "webpack --progress --hide-modules --config config/production.webpack.config.js",
+    "dev-client": "webpack --watch --progress --hide-modules --config config/webpack.config.js",
+    "test": "npm run test-web",
+    "build": "npm run build-web && npm run build-client && npm run build-watcher && npm run build-course"
   },
   "dependencies": {
     "admin-lte": "^2.4.2",
@@ -27,7 +26,7 @@
     "chartjs-plugin-datalabels": "^0.2.0",
     "cheerio": "^1.0.0-rc.2",
     "config": "^1.28.1",
-    "csv": "^2.0.0",
+    "csv-parse": "^2.0.0",
     "debug": "^3.1.0",
     "es-collections": "0.0.2",
     "express": "^4.16.2",
@@ -53,8 +52,10 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2015-native-modules": "^6.9.4",
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.8",
+    "depcheck": "^0.6.8",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "html-webpack-plugin": "^2.30.1",
@@ -64,6 +65,7 @@
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^13.6.2",
     "vue-template-compiler": "^2.5.13",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "webpack-node-externals": "^1.6.0"
   }
 }

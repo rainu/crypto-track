@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+
+  web:
+    image: docker-repo.raysha.de/cryptotrack-web
+    build:
+      context: ./server/web/
+    ports:
+      - "3000:8080"
+    depends_on:
+      - db
+
+  watch:
+    image: docker-repo.raysha.de/cryptotrack-watch
+    build:
+      context: ./server/watch/
+    depends_on:
+      - db
+
+  course:
+    image: docker-repo.raysha.de/cryptotrack-course
+    build:
+      context: ./server/course/
+    depends_on:
+      - db
+
+  db:
+    image: mongo
+    restart: always

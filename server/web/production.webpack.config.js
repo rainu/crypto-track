@@ -1,15 +1,6 @@
 const path = require('path');
-const fs = require('fs');
+const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
-
-let nodeModules = {};
-fs.readdirSync('node_modules')
-  .filter(function(x) {
-    return ['.bin'].indexOf(x) === -1;
-  })
-  .forEach(function(mod) {
-    nodeModules[mod] = 'commonjs ' + mod;
-  });
 
 module.exports = {
   entry: ['./server/web/run.js'],
@@ -18,7 +9,7 @@ module.exports = {
     __dirname: false,
     __filename: false,
   },
-  externals: nodeModules,
+  externals: [nodeExternals()],
   output: {
     path: path.resolve(__dirname, './dist/'),
     publicPath: '../../',
@@ -29,9 +20,6 @@ module.exports = {
     extensions: ['.js'],
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': { NODE_ENV: '"production"' },
-    }),
     new webpack.NoEmitOnErrorsPlugin(),
   ],
 };

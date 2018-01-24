@@ -1,6 +1,7 @@
 image: node:alpine
 
 stages:
+  - test
   - build
   - deploy
 
@@ -14,11 +15,19 @@ variables:
   CFG_MONGO_HOST: "mongo"
 
 test:
-  stage: build
+  stage: test
   services:
     - name: mongo
       alias: mongo
   script:
     - apk --update add git
     - npm install
-    - npm test
+    - npm run test
+
+build:
+  stage: build
+  script:
+    - apk --update add git
+    - npm install
+    - npm run build
+    - docker-compose build

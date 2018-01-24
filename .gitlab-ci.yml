@@ -3,7 +3,7 @@ image: node:alpine
 stages:
   - test
   - build
-  - deploy
+  - dockerrize
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
@@ -30,4 +30,20 @@ build:
     - apk --update add git
     - npm install
     - npm run build
+  artifacts:
+    paths:
+    - ./server/course/dist
+    - ./server/watch/dist
+    - ./server/web/dist
+    expire_in: 5 minutes
+
+dockerrize:
+  image: docker:latest
+  stage: dockerrize
+  script:
     - docker-compose build
+  dependencies:
+    - build
+  only:
+    - master
+

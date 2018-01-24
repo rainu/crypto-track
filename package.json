@@ -5,14 +5,14 @@
   "scripts": {
     "web": "node ./server/web/run.js",
     "test-web": "mocha server/web/test --recursive",
-    "build-web": "webpack --progress --config server/web/production.webpack.config.js && node minify-package-json.js server/web/dist && cp -r config server/web/dist/",
+    "build-web": "webpack --config server/web/production.webpack.config.js && node minify-package-json.js server/web/dist && cp -r config server/web/dist/",
     "watcher": "node ./server/watch/run.js",
     "test-watcher": "mocha server/watch/test --recursive",
-    "build-watcher": "webpack --progress --config server/watch/production.webpack.config.js && node minify-package-json.js server/watch/dist && cp -r config server/watch/dist/",
+    "build-watcher": "webpack --config server/watch/production.webpack.config.js && node minify-package-json.js server/watch/dist && cp -r config server/watch/dist/",
     "course": "node ./server/course/run.js",
     "test-course": "mocha server/course/test --recursive",
-    "build-course": "webpack --progress --config server/course/production.webpack.config.js && node minify-package-json.js server/course/dist && cp -r config server/course/dist/",
-    "build-client": "webpack --progress --hide-modules --config config/production.webpack.config.js",
+    "build-course": "webpack --config server/course/production.webpack.config.js && node minify-package-json.js server/course/dist && cp -r config server/course/dist/",
+    "build-client": "webpack --hide-modules --config config/production.webpack.config.js",
     "dev-client": "webpack --watch --progress --hide-modules --config config/webpack.config.js",
     "test": "npm run test-web",
     "build": "npm run build-web && npm run build-client && npm run build-watcher && npm run build-course"

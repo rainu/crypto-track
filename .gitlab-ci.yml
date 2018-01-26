@@ -30,7 +30,7 @@ build:
     - apk --update add git
     - npm install
     - npm run build
-    - echo "{\"version\": \"${CI_COMMIT_SHA}\", \"date\": $(date +'%s' )000}" > ./server/web/dist/public/version
+    - echo "{\"version\":\"${CI_COMMIT_SHA}\", \"date\":$(date +'%s' )000}" > ./server/web/dist/public/version
   artifacts:
     paths:
     - ./server/course/dist

@@ -41,7 +41,9 @@ dockerrize:
   image: tmaier/docker-compose:latest
   stage: dockerrize
   script:
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
     - docker-compose build
+    - docker-compose push
   dependencies:
     - build
   only:

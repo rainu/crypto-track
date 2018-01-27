@@ -103,7 +103,7 @@
     computed: {
       ...mapState({
         account: state => state.account.account,
-        courses: state => state.course.courses,
+        courses: state => state.course.ticker,
         wallets: state => state.wallet.wallets,
         coins: state => state.wallet.coins,
         taxReport: state => state.taxReport.report,
@@ -133,6 +133,10 @@
                 coin: coin, currency: 'EUR',
               });
             }
+          });
+
+          this.$store.dispatch('course/getHistorical', {
+            coin: coin, currency: 'EUR',
           });
         }
       }

@@ -1,8 +1,9 @@
 import Vue from 'vue';
-import { getCourse } from "../service/course";
+import { getCourse, getHistoricalCourse } from "../service/course";
 
 const state = {
-  courses: {}
+  ticker: {},
+  historical: {},
 };
 
 const getters = {
@@ -10,7 +11,10 @@ const getters = {
 
 const mutations = {
   updateCourse(state, payload){
-    Vue.set(state.courses, payload.symbol, payload.course);
+    Vue.set(state.ticker, payload.symbol, payload.course);
+  },
+  updateHistoricalCourse(state, payload){
+    Vue.set(state.historical, payload.symbol, payload.courses);
   }
 };
 
@@ -27,6 +31,18 @@ const actions = {
       });
     })
   },
+  getHistorical(ctx, payload) {
+    const coin = payload.coin.toUpperCase();
+    const currency = payload.currency.toUpperCase();
+    const symbol = coin + currency;
+
+    getHistoricalCourse(coin, currency, (courses) => {
+      ctx.commit('updateHistoricalCourse', {
+        symbol: symbol,
+        courses: courses,
+      });
+    })
+  }
 };
 
 export default {

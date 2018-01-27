@@ -26,7 +26,7 @@
         balances: 'wallet/balances',
       }),
       ...mapState({
-        courses: s => s.course.courses,
+        courses: s => s.course.ticker,
       }),
       total() {
         let total = 0;

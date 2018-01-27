@@ -84,7 +84,7 @@
     computed: {
       ...mapState({
         coins: s => s.wallet.coins,
-        courses: s => s.course.courses,
+        courses: s => s.course.ticker,
       }),
       ...mapGetters({
         balances: 'wallet/balances',

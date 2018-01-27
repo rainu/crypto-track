@@ -24,6 +24,9 @@ const resInterceptor = instance.interceptors.response.use(res => {
   store.commit('call/stopCall', { id: callId });
 
   return res;
+}, error => {
+  const callId = error.config.headers[HEADER_CALL_ID];
+  store.commit('call/stopCall', { id: callId });
 });
 
 export default instance

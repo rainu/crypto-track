@@ -7,7 +7,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   entry: ['./client/js/main.js'],
   output: {
-    path: path.resolve(__dirname, '../public/'),
+    path: path.resolve(__dirname, '../server/web/dist/public'),
     publicPath: '/',
     filename: 'crypto-track.js'
   },
@@ -70,7 +70,7 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: path.resolve(__dirname, '../public/index.html'),
+      filename: path.resolve(__dirname, '../server/web/dist/public/index.html'),
       template: path.resolve(__dirname, '../client/index.html'),
       inject: true
     }),

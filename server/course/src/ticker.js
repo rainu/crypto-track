@@ -17,7 +17,7 @@ const doJob = function(){
         const symbol = coin.symbol + 'EUR';
 
         Course.findOneAndUpdate(
-          {symbol: symbol},
+          {symbol: symbol, type: CourseType.TICKER},
           {
             symbol: symbol,
             date: new Date(coin.last_updated * 1000),

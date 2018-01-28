@@ -235,7 +235,7 @@ const updateCourses = (mapping, USDEURRatio, coin) => {
             const eurCourse = {
               symbol: `${coin}EUR`,
               date: usdCourse.date,
-              course: usdCourse.course / USDEURRatio[moment(usdCourse.date).format('DD.MM.YYYY')].course,
+              course: usdCourse.course * USDEURRatio[moment(usdCourse.date).format('DD.MM.YYYY')].course,
               type: usdCourse.type,
             };
 

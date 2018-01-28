@@ -70,22 +70,26 @@ const mutations = {
 
 const actions = {
   getFullWallet(ctx, walletId) {
-    requestWallet(walletId, fullWallet => {
-      ctx.commit('addWallet', fullWallet);
+    return new Promise((resolve, reject) => {
+      requestWallet(walletId, fullWallet => {
+        ctx.commit('addWallet', fullWallet);
 
-      for(let tx of fullWallet.transactions){
-        ctx.commit('addTransaction', tx);
-      }
-      for(let coin of fullWallet.coins) {
-        if(!ctx.state.coins.includes(coin)) {
-          ctx.commit('addCoin', coin);
+        for(let tx of fullWallet.transactions){
+          ctx.commit('addTransaction', tx);
         }
-      }
-      for(let currency of fullWallet.currencies) {
-        if(!ctx.state.currencies.includes(currency)) {
-          ctx.commit('currencies', currency);
+        for(let coin of fullWallet.coins) {
+          if(!ctx.state.coins.includes(coin)) {
+            ctx.commit('addCoin', coin);
+          }
         }
-      }
+        for(let currency of fullWallet.currencies) {
+          if(!ctx.state.currencies.includes(currency)) {
+            ctx.commit('currencies', currency);
+          }
+        }
+
+        resolve();
+      });
     });
   }
 };

@@ -117,32 +117,8 @@
         openCalls: 'call/openCalls',
       }),
     },
-    watch: {
-      account(account){
-        for(let wallet of account.wallets) {
-          this.$store.dispatch('wallet/getFullWallet', wallet._id);
-        }
-      },
-      coins(newCoins){
-        for(let coin of newCoins) {
-          this.$store.dispatch('job/add', {
-            name: `courseUpdater_${coin}`,
-            interval: 60000,
-            execute: () => {
-              this.$store.dispatch('course/update', {
-                coin: coin, currency: 'EUR',
-              });
-            }
-          });
-
-          this.$store.dispatch('course/getHistorical', {
-            coin: coin, currency: 'EUR',
-          });
-        }
-      }
-    },
     created() {
-      this.$store.dispatch('account/getAccount', this.$route.params.username);
+      this.$store.dispatch('account/updateAccount', this.$route.params.username);
     }
   };
 </script>

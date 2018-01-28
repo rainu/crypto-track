@@ -31,18 +31,22 @@ const actions = {
       });
     })
   },
-  getHistorical(ctx, payload) {
-    const coin = payload.coin.toUpperCase();
-    const currency = payload.currency.toUpperCase();
-    const symbol = coin + currency;
+  updateHistorical(ctx, payload) {
+    return new Promise((resolve, reject) => {
+      const coin = payload.coin.toUpperCase();
+      const currency = payload.currency.toUpperCase();
+      const symbol = coin + currency;
 
-    getHistoricalCourse(coin, currency, (courses) => {
-      courses.reverse();
-      ctx.commit('updateHistoricalCourse', {
-        symbol: symbol,
-        courses: courses,
-      });
-    })
+      getHistoricalCourse(coin, currency, (courses) => {
+        courses.reverse();
+        ctx.commit('updateHistoricalCourse', {
+          symbol: symbol,
+          courses: courses,
+        });
+
+        resolve();
+      })
+    });
   }
 };
 

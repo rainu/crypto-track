@@ -48,6 +48,10 @@
       options: {
         required: false,
         default: {
+          animation: {
+            duration: 0, // general animation time
+          },
+          responsiveAnimationDuration: 0, // animation duration after a resize
           tooltips: {
             callbacks: {
               label(tpItem, data){

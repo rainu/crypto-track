@@ -23,6 +23,14 @@
         <balance-chart></balance-chart>
       </box>
     </grid-item>
+    <grid-item :x="layout[4].x" :y="layout[4].y"
+               :w="layout[4].w" :h="layout[4].h"
+               :i="layout[4].i" :dragIgnoreFrom="'.drag-ignore'">
+      <box>
+        <span slot="title">Bilanz nach Tagen</span>
+        <balance-by-day-chart></balance-by-day-chart>
+      </box>
+    </grid-item>
   </grid-layout>
 </template>
 
@@ -31,11 +39,12 @@
   import TotalCoins from "./widgets/TotalCoins";
   import TotalCurrency from "./widgets/TotalCurrency";
   import BalanceChart from "./widgets/BalanceChart";
+  import BalanceByDayChart from "./widgets/BalanceByDayChart";
 
   export default {
     name: "dashboard",
     components: {
-      AccountValue, TotalCoins, TotalCurrency, BalanceChart
+      AccountValue, TotalCoins, TotalCurrency, BalanceChart, BalanceByDayChart
     },
     props: {
       gridSize: {
@@ -52,6 +61,7 @@
           {"x":3,"y":0,"w":3,"h":1,"i":"totalCurrencies"},
           {"x":6,"y":0,"w":3,"h":1,"i":"accountValue"},
           {"x":0,"y":1,"w":2,"h":3,"i":"balanceChart"},
+          {"x":2,"y":1,"w":7,"h":5,"i":"balanceByDayChart"},
         ],
       };
     },

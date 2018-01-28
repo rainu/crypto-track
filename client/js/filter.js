@@ -49,7 +49,7 @@ const euro = function (value) {
   return value
 };
 
-const date = function(value) {
+const dateTime = function(value) {
   if (value == null || typeof value === 'undefined') return '';
 
   if(typeof value === 'date' || typeof value === 'number') {
@@ -63,10 +63,25 @@ const date = function(value) {
   return value
 };
 
+const date = function(value) {
+  if (value == null || typeof value === 'undefined') return '';
+
+  if(typeof value === 'date' || typeof value === 'number') {
+    value = $.format.date(value, "dd.MM.yy")
+  }
+
+  if(value instanceof moment) {
+    value = value.format("DD.MM.YYYY")
+  }
+
+  return value
+};
+
 
 export {
   fnumber,
   number,
   euro,
+  dateTime,
   date
 }

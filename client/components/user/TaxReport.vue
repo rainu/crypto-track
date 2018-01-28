@@ -15,8 +15,8 @@
           {{props.row.amount.toFixed(8) | number}}
       </td>
       <td>{{props.row.currency}}</td>
-      <td>{{report[props.row.originalIndex].buyDate | date}}</td>
-      <td>{{report[props.row.originalIndex].sellDate | date}}</td>
+      <td>{{report[props.row.originalIndex].buyDate | dateTime}}</td>
+      <td>{{report[props.row.originalIndex].sellDate | dateTime}}</td>
       <td>{{props.row.short ? 'Short' : 'Long'}}</td>
       <td class="col-currency">{{props.row.sellPrice | fnumber}}</td>
       <td class="col-currency">{{props.row.buyPrice | fnumber}}</td>

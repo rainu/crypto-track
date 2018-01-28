@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import {minToNormal, isCurrency} from '../../../../../server/web/src/model/currency'
+  import {accountValue} from '../../../../js/calc'
   import { mapState, mapGetters, mapActions } from 'vuex';
 
   export default {
@@ -29,20 +29,7 @@
         courses: s => s.course.ticker,
       }),
       total() {
-        const currency = this.counterValue.toUpperCase();
-
-        let total = 0;
-        for(let coin of Object.keys(this.balances)) {
-          let balance = this.balances[coin];
-          let tag = coin + currency;
-
-          if(this.courses.hasOwnProperty(tag)) {
-            let course = this.courses[tag];
-            total += minToNormal(balance, coin) * course;
-          }
-        }
-
-        return total + minToNormal(this.balances[currency], currency);
+        return accountValue(this.balances, this.courses, this.counterValue);
       }
     }
   }

@@ -37,6 +37,7 @@ const actions = {
     const symbol = coin + currency;
 
     getHistoricalCourse(coin, currency, (courses) => {
+      courses.reverse();
       ctx.commit('updateHistoricalCourse', {
         symbol: symbol,
         courses: courses,

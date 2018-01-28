@@ -1,5 +1,5 @@
 import Vue from "vue";
-import requestWallet from '../service/wallet';
+import {getFullWallet as requestWallet, getBalances} from '../service/wallet';
 
 const state = {
   wallets: [],
@@ -34,6 +34,22 @@ const getters = {
     }
 
     return balances;
+  },
+  filteredBalances(state) {
+    return (from, until) => {
+      let balances = {};
+      for(let wallet of state.wallets) {
+        for(let coin of Object.keys(wallet.balances)){
+          if(!balances.hasOwnProperty(coin)) {
+            balances[coin] = 0;
+          }
+
+          balances[coin] += getBalances(wallet, from, until)[coin];
+        }
+      }
+
+      return balances;
+    }
   }
 };
 

@@ -18,7 +18,7 @@ const getTxMappings = (wallet) => {
   return coinMapping;
 };
 
-const getBalances = (wallet) => {
+const getBalances = (wallet, from = null, until = null) => {
   let balances = {};
   const txMapping = getTxMappings(wallet);
 
@@ -27,6 +27,18 @@ const getBalances = (wallet) => {
     balances[coin] = 0;
 
     for(let tx of coinTx) {
+      //if the from parameter is given:
+      //we have to check if the current tx is after from
+      if(from && tx.date < from){
+        continue; //skip this tx
+      }
+
+      //if the until parameter is given:
+      //we have to check if the current tx is before until
+      if(until && tx.date > until){
+        continue; //skip this tx
+      }
+
       if(wallet.address === tx.from) {
         balances[coin] -= tx.amount;
         balances[coin] -= tx.fee ? tx.fee : 0;
@@ -61,6 +73,10 @@ const getCurrencies = (wallet) => {
 
 const getFullWallet = (id, callback) => {
   axios.get(`/wallet/${id}/full`).then(res => {
+    for(let tx of res.data.transactions) {
+      tx.date = new Date(tx.date); //transform string to date
+    }
+
     res.data.balances = getBalances(res.data);
     res.data.coins = getCoins(res.data);
     res.data.currencies = getCurrencies(res.data);
@@ -69,4 +85,7 @@ const getFullWallet = (id, callback) => {
   });
 };
 
-export default getFullWallet;
+export {
+  getFullWallet,
+  getBalances,
+};

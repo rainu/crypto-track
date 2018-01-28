@@ -97,8 +97,14 @@
         }
       }
     },
+    data() {
+      return {
+        chartData: {},
+      }
+    },
     computed: {
       ...mapState({
+        isStale: s => s.account.accountStale,
         coins: s => s.wallet.coins,
         currencies: s => s.wallet.currencies,
         courses: s => s.course.historical,
@@ -107,7 +113,9 @@
         balances: 'wallet/balances',
         hasOpenCalls: 'call/hasOpenCalls',
       }),
-      chartData() {
+    },
+    methods: {
+      calcChartData() {
         let data = {
           labels: [],
         };
@@ -162,6 +170,11 @@
         return data;
       }
     },
+    watch: {
+      isStale(){
+        this.chartData = this.calcChartData();
+      }
+    }
   }
 </script>
 

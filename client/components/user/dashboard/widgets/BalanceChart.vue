@@ -85,15 +85,23 @@
         }
       }
     },
+    data() {
+      return {
+        chartData: {}
+      }
+    },
     computed: {
       ...mapState({
+        isStale: s => s.account.accountStale,
         coins: s => s.wallet.coins,
         courses: s => s.course.ticker,
       }),
       ...mapGetters({
         balances: 'wallet/balances',
       }),
-      chartData() {
+    },
+    methods: {
+      calcChartData() {
         let data = {};
         data.labels = this.coins.filter(coin => {
           return this.balances[coin] > 0;
@@ -138,6 +146,14 @@
         }];
 
         return data;
+      }
+    },
+    watch: {
+      isStale(){
+        this.chartData = this.calcChartData();
+      },
+      courses(){
+        this.chartData = this.calcChartData();
       }
     }
   }

@@ -17,6 +17,9 @@
       </td>
       <td class="text-right">{{props.row.value | fnumber}}</td>
       <td class="text-right">{{props.row.course | fnumber}}</td>
+      <td class="text-right" :style="props.row.trends['1'] >= 0 ? 'color: green;' : 'color: red;'">{{props.row.trends['1'] | fnumber}} %</td>
+      <td class="text-right" :style="props.row.trends['7'] >= 0 ? 'color: green;' : 'color: red;'">{{props.row.trends['7'] | fnumber}} %</td>
+      <td class="text-right" :style="props.row.trends['30'] >= 0 ? 'color: green;' : 'color: red;'">{{props.row.trends['30'] | fnumber}} %</td>
     </template>
   </vue-good-table>
 </template>
@@ -60,6 +63,24 @@
             type: 'number',
             sortable: true,
           },
+          {
+            label: `Trend 24h`,
+            field: 'trends.1',
+            type: 'number',
+            sortable: true,
+          },
+          {
+            label: `Trend 7D`,
+            field: 'trends.7',
+            type: 'number',
+            sortable: true,
+          },
+          {
+            label: `Trend 30D`,
+            field: 'trends.30',
+            type: 'number',
+            sortable: true,
+          }
         ],
         rows: []
       }
@@ -69,12 +90,20 @@
         isStale: s => s.account.accountStale,
         coins: s => s.wallet.coins,
         courses: s => s.course.ticker,
+        historicalCourses: s => s.course.historical,
       }),
       ...mapGetters({
         balances: 'wallet/balances',
       }),
     },
     methods: {
+      calcChange(symbol, days) {
+        try {
+          return this.courses[symbol] / this.historicalCourses[symbol][days - 1].course * 100 - 100;
+        }catch(e){
+          return 0;
+        }
+      },
       calcRows() {
         let rows = [];
 
@@ -82,12 +111,7 @@
           return rows;
         }
 
-        let coins = this.coins.filter(coin => {
-          // return this.balances[coin] > 0;
-          return true;
-        });
-
-        for(let coin of coins) {
+        for(let coin of this.coins) {
           let symbol = coin + this.counterValue;
 
           rows.push({
@@ -95,6 +119,11 @@
             amount: minToNormal(this.balances[coin], coin),
             value: this.courses[symbol] * minToNormal(this.balances[coin], coin),
             course: this.courses[symbol],
+            trends: {
+              1: this.calcChange(symbol, 1),
+              7: this.calcChange(symbol, 7),
+              30: this.calcChange(symbol, 30)
+            }
           });
         }
         return rows;

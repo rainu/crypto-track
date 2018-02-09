@@ -26,6 +26,7 @@
     "chartjs-plugin-datalabels": "^0.2.0",
     "cheerio": "^1.0.0-rc.2",
     "config": "^1.28.1",
+    "cryptocoins-icons": "^2.7.0",
     "csv-parse": "^2.0.0",
     "debug": "^3.1.0",
     "es-collections": "0.0.2",

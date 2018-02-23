@@ -74,6 +74,12 @@
               <span>Steuer-Report</span>
             </a>
           </router-link>
+          <router-link :to="{name: 'backup'}" tag="li" active-class="active" exact>
+            <a>
+              <i class="fa fa-database"></i>
+              <span>Backup</span>
+            </a>
+          </router-link>
         </ul>
       </section>
     </aside>

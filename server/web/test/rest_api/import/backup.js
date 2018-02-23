@@ -330,4 +330,17 @@ describe('Import backup', () => {
       });
     });
   });
+
+  it('invalid data should cause a bad-request', (done) => {
+    request.put({
+      url: global.baseUri + '/api/backup/' + username,
+      form: {}
+    }, (err, resp, body) => {
+      assert(!err);
+      assert.equal(HttpStatus.BAD_REQUEST, resp.statusCode);
+
+      done();
+    });
+  });
+
 });

@@ -15,6 +15,11 @@ const TaxReport = resolve => {
     resolve(require('../components/user/TaxReport.vue'));
   });
 };
+const Backup = resolve => {
+  require.ensure(['../components/user/Backup.vue'], () => {
+    resolve(require('../components/user/Backup.vue'));
+  });
+};
 
 export const routes = [
   {
@@ -34,6 +39,9 @@ export const routes = [
       },
       {
         path: 'tax-report', name: 'taxReport', component: TaxReport,
+      },
+      {
+        path: 'backup', name: 'backup', component: Backup,
       },
     ]
   },

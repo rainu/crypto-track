@@ -35,7 +35,7 @@ TransactionSchema.methods.normalizedAmount = function() {
   return Currency.minToNormal(this.amount, this.currency);
 };
 TransactionSchema.methods.normalizedFee = function() {
-  if(!this.fee) return undefined;
+  if(!this.fee) return 0;
 
   return Currency.minToNormal(this.fee, this.currency);
 };

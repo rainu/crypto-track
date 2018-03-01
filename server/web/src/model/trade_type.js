@@ -6,6 +6,7 @@ module.exports = {
   SELL: 'SELL',
   EXCHANGE: 'EXCHANGE',
 
+  USED: 'USED',
   GIFT: 'GIFT',
   SPEND: 'SPEND',
   DONATION: 'DONATION',

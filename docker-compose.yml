@@ -6,8 +6,10 @@ services:
     image: rainu/cryptotrack-web
     build:
       context: ./server/web/
+    environment:
+      - CFG_MONGO_HOST=db
     ports:
-      - "3000:8080"
+      - "3000:3000"
     depends_on:
       - db
 
@@ -15,6 +17,8 @@ services:
     image: rainu/cryptotrack-watch
     build:
       context: ./server/watch/
+    environment:
+      - CFG_MONGO_HOST=db
     depends_on:
       - db
 
@@ -22,6 +26,8 @@ services:
     image: rainu/cryptotrack-course
     build:
       context: ./server/course/
+    environment:
+      - CFG_MONGO_HOST=db
     depends_on:
       - db
 
